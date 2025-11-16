@@ -15,28 +15,17 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 
-// Email transporter configuration with timeout settings for Render.com
-// Try port 465 with SSL first, fallback to 587
+// Email transporter configuration - optimized for Render.com
 const transporter = nodemailer.createTransport({
     service: 'gmail',
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true, // Use SSL for port 465
     auth: {
         user: 'govindayadav2478@gmail.com',
         pass: 'vboj hawo vwbh skum', // Gmail app password
     },
-    connectionTimeout: 20000, // 20 seconds
-    greetingTimeout: 20000,
-    socketTimeout: 20000,
-    requireTLS: true,
-    tls: {
-        ciphers: 'SSLv3',
-        rejectUnauthorized: false
-    },
-    pool: true, // Use connection pooling
-    maxConnections: 1,
-    maxMessages: 3
+    // Let nodemailer auto-detect the best connection settings
+    connectionTimeout: 60000, // 60 seconds
+    greetingTimeout: 30000,
+    socketTimeout: 60000,
 });
 
 // Validation helper
@@ -332,50 +321,23 @@ Please respond to: ${email}
         console.log('To:', 'reyanshscientificworks@gmail.com');
         console.log('Subject:', emailSubject);
 
-        // Try to send email, but don't fail the request if email fails
-        let mailResult = null;
-        try {
-            // Verify connection first (optional)
-            try {
-                await transporter.verify();
-                console.log('SMTP connection verified successfully');
-            } catch (verifyError) {
-                console.error('SMTP verification failed:', verifyError);
-                // Continue anyway, sometimes verify fails but send works
-            }
-            
-            // Send email with promise (not callback)
-            mailResult = await transporter.sendMail({
-                from: 'Krishnawanshi Overseas Website <govindayadav2478@gmail.com>',
-                to: 'reyanshscientificworks@gmail.com',
-                replyTo: email,
-                subject: emailSubject,
-                text: emailText,
-                html: emailHtml,
-            });
+        // Send email
+        const mailResult = await transporter.sendMail({
+            from: 'Krishnawanshi Overseas Website <govindayadav2478@gmail.com>',
+            to: 'reyanshscientificworks@gmail.com',
+            replyTo: email,
+            subject: emailSubject,
+            text: emailText,
+            html: emailHtml,
+        });
 
-            console.log('Email sent successfully!');
-            if (mailResult) {
-                console.log('Message ID:', mailResult.messageId);
-                console.log('Response:', mailResult.response);
-            }
-        } catch (emailError) {
-            console.error('Email sending failed:', emailError);
-            console.error('Email error details:', {
-                message: emailError.message,
-                code: emailError.code,
-                command: emailError.command
-            });
-            // Don't throw - we'll still return success since the inquiry was received
-            // The email failure is logged but doesn't fail the request
-        }
+        console.log('✅ Email sent successfully!');
+        console.log('Message ID:', mailResult.messageId);
+        console.log('Response:', mailResult.response);
 
-        // Return success even if email failed (inquiry was received)
         res.status(200).json({
             success: true,
-            message: mailResult 
-                ? 'Product inquiry sent successfully. We will contact you soon!'
-                : 'Your inquiry has been received successfully. Email notification failed, but we have your details and will contact you soon!'
+            message: 'Product inquiry sent successfully. We will contact you soon!'
         });
     } catch (error) {
         console.error('Product inquiry error:', error);
