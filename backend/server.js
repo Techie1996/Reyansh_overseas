@@ -15,13 +15,28 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 
-// Email transporter configuration
+// Email transporter configuration with timeout settings for Render.com
+// Try port 465 with SSL first, fallback to 587
 const transporter = nodemailer.createTransport({
     service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true, // Use SSL for port 465
     auth: {
         user: 'govindayadav2478@gmail.com',
         pass: 'vboj hawo vwbh skum', // Gmail app password
     },
+    connectionTimeout: 20000, // 20 seconds
+    greetingTimeout: 20000,
+    socketTimeout: 20000,
+    requireTLS: true,
+    tls: {
+        ciphers: 'SSLv3',
+        rejectUnauthorized: false
+    },
+    pool: true, // Use connection pooling
+    maxConnections: 1,
+    maxMessages: 3
 });
 
 // Validation helper
@@ -118,7 +133,15 @@ ${type === 'product_inquiry' ? '\nType: Product Inquiry' : ''}
 </html>
         `;
 
-        await transporter.sendMail({
+        // Verify connection first (optional, but helps debug)
+        try {
+            await transporter.verify();
+            console.log('SMTP connection verified for contact form');
+        } catch (verifyError) {
+            console.error('SMTP verification failed:', verifyError);
+        }
+
+        const mailResult = await transporter.sendMail({
             from: 'Krishnawanshi Overseas Website <govindayadav2478@gmail.com>',
             to: 'reyanshscientificworks@gmail.com',
             replyTo: email,
@@ -126,6 +149,9 @@ ${type === 'product_inquiry' ? '\nType: Product Inquiry' : ''}
             text: emailText,
             html: emailHtml,
         });
+
+        console.log('Contact form email sent successfully!');
+        console.log('Message ID:', mailResult.messageId);
 
         res.status(200).json({
             success: true,
@@ -306,6 +332,15 @@ Please respond to: ${email}
         console.log('To:', 'reyanshscientificworks@gmail.com');
         console.log('Subject:', emailSubject);
 
+        // Verify connection first
+        try {
+            await transporter.verify();
+            console.log('SMTP connection verified successfully');
+        } catch (verifyError) {
+            console.error('SMTP verification failed:', verifyError);
+            // Continue anyway, sometimes verify fails but send works
+        }
+
         const mailResult = await transporter.sendMail({
             from: 'Krishnawanshi Overseas Website <govindayadav2478@gmail.com>',
             to: 'reyanshscientificworks@gmail.com',
@@ -313,6 +348,12 @@ Please respond to: ${email}
             subject: emailSubject,
             text: emailText,
             html: emailHtml,
+        }, (error, info) => {
+            if (error) {
+                console.error('SendMail callback error:', error);
+            } else {
+                console.log('SendMail callback success:', info);
+            }
         });
 
         console.log('Email sent successfully!');

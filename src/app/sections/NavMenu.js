@@ -38,14 +38,31 @@ export default function NavMenu() {
     }
     function handleBrochure(e) {
         e.preventDefault();
-        const link = document.createElement('a');
-        link.href = '/Kanha_Scientific.pdf';
-        link.download = 'brochure.pdf';
-        link.target = '_blank';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        setMenuOpen(false);
+        try {
+            // Create download link
+            const link = document.createElement('a');
+            link.href = '/Kanha_Scientific.pdf';
+            link.download = 'brochure.pdf';
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            
+            // Trigger download
+            link.click();
+            
+            // Clean up after a short delay
+            setTimeout(() => {
+                if (document.body.contains(link)) {
+                    document.body.removeChild(link);
+                }
+            }, 100);
+            
+            setMenuOpen(false);
+        } catch (error) {
+            console.error('Download error:', error);
+            // Fallback: open in new tab if download fails
+            window.open('/Kanha_Scientific.pdf', '_blank');
+            setMenuOpen(false);
+        }
     }
     return (
         <>
