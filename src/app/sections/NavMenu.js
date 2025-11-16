@@ -39,7 +39,7 @@ export default function NavMenu() {
     function handleBrochure(e) {
         e.preventDefault();
         const link = document.createElement('a');
-        link.href = '/sample-local-pdf.pdf';
+        link.href = '/Kanha_Scientific.pdf';
         link.download = 'brochure.pdf';
         link.target = '_blank';
         document.body.appendChild(link);
@@ -109,8 +109,8 @@ export default function NavMenu() {
                         href="#about"
                         onClick={e => handleNavClick(e, 'about')}
                         whileHover={{ scale: 1.05 }}
-                        style={{ 
-                            color: '#111', 
+                        style={{
+                            color: '#111',
                             transition: 'all 0.2s ease',
                             textDecoration: 'none'
                         }}
@@ -149,8 +149,8 @@ export default function NavMenu() {
                         href="#contact"
                         onClick={e => handleNavClick(e, 'contact')}
                         whileHover={{ scale: 1.05 }}
-                        style={{ 
-                            color: '#111', 
+                        style={{
+                            color: '#111',
                             transition: 'all 0.2s ease',
                             textDecoration: 'none'
                         }}
@@ -195,26 +195,27 @@ export default function NavMenu() {
                             left: 0,
                             width: '100vw',
                             height: '100vh',
-                            background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+                            background: '#ffffff',
                             zIndex: 9999,
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
                             justifyContent: 'center',
                             padding: '2rem',
-                            boxShadow: '-4px 0 20px rgba(0,0,0,0.1)'
+                            boxShadow: '-4px 0 20px rgba(0,0,0,0.1)',
+                            overflowY: 'auto'
                         }}>
                         <motion.button
                             onClick={() => setMenuOpen(false)}
                             whileHover={{ scale: 1.1, rotate: 90 }}
                             whileTap={{ scale: 0.9 }}
-                            style={{ 
-                                position: 'absolute', 
-                                top: '1.5rem', 
-                                right: '1.5rem', 
-                                fontSize: '2rem', 
-                                background: 'rgba(0,0,0,0.05)', 
-                                border: 'none', 
+                            style={{
+                                position: 'absolute',
+                                top: '1.5rem',
+                                right: '1.5rem',
+                                fontSize: '2rem',
+                                background: 'rgba(0,0,0,0.05)',
+                                border: 'none',
                                 borderRadius: '50%',
                                 width: '48px',
                                 height: '48px',
@@ -228,27 +229,27 @@ export default function NavMenu() {
                         >
                             &times;
                         </motion.button>
-                        
-                        <div style={{ 
-                            display: 'flex', 
-                            flexDirection: 'column', 
-                            alignItems: 'center', 
+
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
                             gap: '1.5rem',
                             width: '100%',
                             maxWidth: '400px'
                         }}>
-                            <motion.a 
-                                href="#" 
-                                onClick={handleBrochure} 
+                            <motion.a
+                                href="#"
+                                onClick={handleBrochure}
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                style={{ 
-                                    background: '#1a1a1a', 
-                                    color: '#fff', 
-                                    padding: '1rem 2.5rem', 
-                                    borderRadius: '12px', 
-                                    fontWeight: 600, 
-                                    textDecoration: 'none', 
+                                style={{
+                                    background: '#1a1a1a',
+                                    color: '#fff',
+                                    padding: '1rem 2.5rem',
+                                    borderRadius: '12px',
+                                    fontWeight: 600,
+                                    textDecoration: 'none',
                                     fontSize: '1.125rem',
                                     width: '100%',
                                     textAlign: 'center',
@@ -257,59 +258,69 @@ export default function NavMenu() {
                             >
                                 📄 Brochure
                             </motion.a>
-                            
+
                             {isHomePage ? (
                                 <>
-                                    <motion.a 
-                                        href="#home" 
-                                        onClick={e => handleNavClick(e, 'home')} 
+                                    <motion.a
+                                        href="#home"
+                                        onClick={e => handleNavClick(e, 'home')}
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
-                                        style={{ 
-                                            color: '#2563eb', 
-                                            fontWeight: 600, 
-                                            fontSize: '1.5rem', 
+                                        style={{
+                                            color: '#2563eb',
+                                            fontWeight: 700,
+                                            fontSize: '1.75rem',
                                             textDecoration: 'none',
-                                            padding: '0.75rem 1.5rem',
-                                            borderRadius: '8px',
-                                            background: 'rgba(37, 99, 235, 0.1)',
+                                            padding: '1.25rem 2rem',
+                                            borderRadius: '12px',
+                                            background: 'rgba(37, 99, 235, 0.15)',
+                                            border: '2px solid rgba(37, 99, 235, 0.3)',
                                             width: '100%',
-                                            textAlign: 'center'
+                                            textAlign: 'center',
+                                            boxShadow: '0 2px 8px rgba(37, 99, 235, 0.2)'
                                         }}
                                     >
                                         Home
                                     </motion.a>
-                                    <motion.a 
-                                        href="#about" 
-                                        onClick={e => handleNavClick(e, 'about')} 
+                                    <motion.a
+                                        href="#about"
+                                        onClick={e => handleNavClick(e, 'about')}
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
-                                        style={{ 
-                                            color: '#1a1a1a', 
-                                            fontSize: '1.5rem', 
+                                        style={{
+                                            color: '#0f172a',
+                                            fontSize: '1.75rem',
+                                            fontWeight: 600,
                                             textDecoration: 'none',
-                                            padding: '0.75rem 1.5rem',
-                                            borderRadius: '8px',
+                                            padding: '1.25rem 2rem',
+                                            borderRadius: '12px',
                                             width: '100%',
                                             textAlign: 'center',
-                                            transition: 'all 0.2s'
+                                            background: '#f8fafc',
+                                            border: '2px solid #e2e8f0',
+                                            transition: 'all 0.2s',
+                                            boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
                                         }}
                                     >
                                         About
                                     </motion.a>
-                                    <motion.a 
-                                        href="#contact" 
-                                        onClick={e => handleNavClick(e, 'contact')} 
+                                    <motion.a
+                                        href="#contact"
+                                        onClick={e => handleNavClick(e, 'contact')}
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
-                                        style={{ 
-                                            color: '#1a1a1a', 
-                                            fontSize: '1.5rem', 
+                                        style={{
+                                            color: '#0f172a',
+                                            fontSize: '1.75rem',
+                                            fontWeight: 600,
                                             textDecoration: 'none',
-                                            padding: '0.75rem 1.5rem',
-                                            borderRadius: '8px',
+                                            padding: '1.25rem 2rem',
+                                            borderRadius: '12px',
                                             width: '100%',
-                                            textAlign: 'center'
+                                            textAlign: 'center',
+                                            background: '#f8fafc',
+                                            border: '2px solid #e2e8f0',
+                                            boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
                                         }}
                                     >
                                         Contact Us
@@ -317,66 +328,80 @@ export default function NavMenu() {
                                 </>
                             ) : (
                                 <>
-                                    <Link 
-                                        href="/#home" 
-                                        style={{ 
-                                            color: '#1a1a1a', 
-                                            fontSize: '1.5rem', 
+                                    <Link
+                                        href="/#home"
+                                        style={{
+                                            color: '#0f172a',
+                                            fontSize: '1.75rem',
+                                            fontWeight: 600,
                                             textDecoration: 'none',
-                                            padding: '0.75rem 1.5rem',
-                                            borderRadius: '8px',
+                                            padding: '1.25rem 2rem',
+                                            borderRadius: '12px',
                                             width: '100%',
-                                            textAlign: 'center'
-                                        }} 
+                                            textAlign: 'center',
+                                            background: '#f8fafc',
+                                            border: '2px solid #e2e8f0',
+                                            boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+                                        }}
                                         onClick={() => setMenuOpen(false)}
                                     >
                                         Home
                                     </Link>
-                                    <Link 
-                                        href="/#about" 
-                                        style={{ 
-                                            color: '#1a1a1a', 
-                                            fontSize: '1.5rem', 
+                                    <Link
+                                        href="/#about"
+                                        style={{
+                                            color: '#0f172a',
+                                            fontSize: '1.75rem',
+                                            fontWeight: 600,
                                             textDecoration: 'none',
-                                            padding: '0.75rem 1.5rem',
-                                            borderRadius: '8px',
+                                            padding: '1.25rem 2rem',
+                                            borderRadius: '12px',
                                             width: '100%',
-                                            textAlign: 'center'
-                                        }} 
+                                            textAlign: 'center',
+                                            background: '#f8fafc',
+                                            border: '2px solid #e2e8f0',
+                                            boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+                                        }}
                                         onClick={() => setMenuOpen(false)}
                                     >
                                         About
                                     </Link>
-                                    <Link 
-                                        href="/#contact" 
-                                        style={{ 
-                                            color: '#1a1a1a', 
-                                            fontSize: '1.5rem', 
+                                    <Link
+                                        href="/#contact"
+                                        style={{
+                                            color: '#0f172a',
+                                            fontSize: '1.75rem',
+                                            fontWeight: 600,
                                             textDecoration: 'none',
-                                            padding: '0.75rem 1.5rem',
-                                            borderRadius: '8px',
+                                            padding: '1.25rem 2rem',
+                                            borderRadius: '12px',
                                             width: '100%',
-                                            textAlign: 'center'
-                                        }} 
+                                            textAlign: 'center',
+                                            background: '#f8fafc',
+                                            border: '2px solid #e2e8f0',
+                                            boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+                                        }}
                                         onClick={() => setMenuOpen(false)}
                                     >
                                         Contact Us
                                     </Link>
                                 </>
                             )}
-                            <Link 
-                                href="/products" 
-                                style={{ 
-                                    color: isProductsPage ? '#2563eb' : '#1a1a1a', 
-                                    fontWeight: isProductsPage ? 600 : 400, 
-                                    fontSize: '1.5rem', 
+                            <Link
+                                href="/products"
+                                style={{
+                                    color: isProductsPage ? '#2563eb' : '#0f172a',
+                                    fontWeight: isProductsPage ? 700 : 600,
+                                    fontSize: '1.75rem',
                                     textDecoration: 'none',
-                                    padding: '0.75rem 1.5rem',
-                                    borderRadius: '8px',
-                                    background: isProductsPage ? 'rgba(37, 99, 235, 0.1)' : 'transparent',
+                                    padding: '1.25rem 2rem',
+                                    borderRadius: '12px',
+                                    background: isProductsPage ? 'rgba(37, 99, 235, 0.15)' : '#f8fafc',
+                                    border: isProductsPage ? '2px solid rgba(37, 99, 235, 0.3)' : '2px solid #e2e8f0',
                                     width: '100%',
-                                    textAlign: 'center'
-                                }} 
+                                    textAlign: 'center',
+                                    boxShadow: isProductsPage ? '0 2px 8px rgba(37, 99, 235, 0.2)' : '0 2px 8px rgba(0,0,0,0.08)'
+                                }}
                                 onClick={() => setMenuOpen(false)}
                             >
                                 Products

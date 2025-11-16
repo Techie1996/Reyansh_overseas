@@ -125,16 +125,19 @@ export default function Contact() {
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: 0.3 }}
                     whileHover={{ scale: 1.02 }}
-                    style={{ flex: 1, minWidth: 280, maxWidth: 500, padding: 24 }}
+                    style={{ flex: 1, minWidth: 280, maxWidth: 500, padding: 24, width: '100%', boxSizing: 'border-box' }}
                 >
                     <div style={{
                         background: 'rgba(255,255,255,0.85)',
                         boxShadow: '0 8px 32px 0 rgba(31,38,135,0.18)',
                         borderRadius: 18,
-                        padding: 32,
+                        padding: '24px',
                         backdropFilter: 'blur(6px)',
                         WebkitBackdropFilter: 'blur(6px)',
                         border: '1px solid rgba(255,255,255,0.18)',
+                        width: '100%',
+                        boxSizing: 'border-box',
+                        overflow: 'hidden'
                     }}>
                         <ContactForm />
                     </div>

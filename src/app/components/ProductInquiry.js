@@ -88,7 +88,7 @@ export default function ProductInquiry({ isOpen, onClose, selectedProducts = [] 
         }
 
         try {
-            const response = await fetch('https://reyansh-backend.onrender.com/api/product-inquiry', {
+            const response = await fetch('https://reyansh-overseas.onrender.com/api/product-inquiry', {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',

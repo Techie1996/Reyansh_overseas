@@ -6,7 +6,8 @@ export default function Notification() {
     const [notifications, setNotifications] = useState([]);
 
     const showNotification = useCallback((message, type = 'success') => {
-        const id = Date.now();
+        // Generate unique ID using timestamp + random number to avoid collisions
+        const id = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
         setNotifications(prev => [...prev, { id, message, type }]);
         setTimeout(() => {
             setNotifications(prev => prev.filter(n => n.id !== id));

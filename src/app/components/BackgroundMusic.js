@@ -3,12 +3,13 @@ import { useState, useEffect, useRef } from 'react';
 
 export default function BackgroundMusic() {
     const [isPlaying, setIsPlaying] = useState(false);
-    const [volume, setVolume] = useState(0.3);
+    const [volume, setVolume] = useState(0.2);
     const audioRef = useRef(null);
 
-    // Using a pleasant ambient sound - calm, professional background music
-    // For a professional scientific/industrial website, ambient or instrumental music works well
-    const audioUrl = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3";
+    // Using a very smooth, calming ASMR-like ambient sound for anxiety relief
+    // Soft, gentle background music that's barely noticeable but calming
+    // This is a very gentle, ambient track perfect for relaxation and focus
+    const audioUrl = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3";
 
     useEffect(() => {
         if (audioRef.current) {

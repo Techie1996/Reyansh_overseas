@@ -43,7 +43,7 @@ export default function ContactForm() {
         }
 
         try {
-            const res = await fetch('https://reyansh-backend.onrender.com/api/contact', {
+            const res = await fetch('https://reyansh-overseas.onrender.com/api/contact', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -72,12 +72,12 @@ export default function ContactForm() {
     };
 
     return (
-        <form onSubmit={handleSubmit} style={{ maxWidth: 600, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <form onSubmit={handleSubmit} style={{ maxWidth: '100%', width: '100%', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 16, boxSizing: 'border-box' }}>
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4 }}
-                style={{ display: 'flex', gap: 16 }}
+                style={{ display: 'flex', gap: 16, flexWrap: 'wrap', width: '100%' }}
             >
                 <motion.input
                     name="firstName"
@@ -86,7 +86,7 @@ export default function ContactForm() {
                     onChange={handleChange}
                     required
                     whileFocus={{ scale: 1.02, borderColor: '#4285f4' }}
-                    style={{ flex: 1, padding: 12, borderRadius: 8, border: '2px solid #ddd', fontSize: 16, transition: 'all 0.3s ease' }}
+                    style={{ flex: '1 1 calc(50% - 8px)', minWidth: '150px', padding: 12, borderRadius: 8, border: '2px solid #ddd', fontSize: 16, transition: 'all 0.3s ease', boxSizing: 'border-box', width: '100%' }}
                 />
                 <motion.input
                     name="lastName"
@@ -95,7 +95,7 @@ export default function ContactForm() {
                     onChange={handleChange}
                     required
                     whileFocus={{ scale: 1.02, borderColor: '#4285f4' }}
-                    style={{ flex: 1, padding: 12, borderRadius: 8, border: '2px solid #ddd', fontSize: 16, transition: 'all 0.3s ease' }}
+                    style={{ flex: '1 1 calc(50% - 8px)', minWidth: '150px', padding: 12, borderRadius: 8, border: '2px solid #ddd', fontSize: 16, transition: 'all 0.3s ease', boxSizing: 'border-box', width: '100%' }}
                 />
             </motion.div>
             <motion.input
@@ -106,7 +106,7 @@ export default function ContactForm() {
                 onChange={handleChange}
                 required
                 whileFocus={{ scale: 1.02, borderColor: '#4285f4' }}
-                style={{ padding: 12, borderRadius: 8, border: '2px solid #ddd', fontSize: 16, transition: 'all 0.3s ease' }}
+                style={{ padding: 12, borderRadius: 8, border: '2px solid #ddd', fontSize: 16, transition: 'all 0.3s ease', width: '100%', boxSizing: 'border-box' }}
             />
             <motion.textarea
                 name="message"
@@ -115,7 +115,7 @@ export default function ContactForm() {
                 onChange={handleChange}
                 required
                 whileFocus={{ scale: 1.01, borderColor: '#4285f4' }}
-                style={{ padding: 12, borderRadius: 8, border: '2px solid #ddd', fontSize: 16, minHeight: 100, resize: 'vertical', transition: 'all 0.3s ease' }}
+                style={{ padding: 12, borderRadius: 8, border: '2px solid #ddd', fontSize: 16, minHeight: 100, resize: 'vertical', transition: 'all 0.3s ease', width: '100%', boxSizing: 'border-box' }}
             />
             <motion.button
                 type="submit"

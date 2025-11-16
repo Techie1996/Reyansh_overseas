@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProductInquiry from './ProductInquiry';
 
@@ -7,6 +7,7 @@ export default function InquiryCart() {
     const [cart, setCart] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
     const [showInquiry, setShowInquiry] = useState(false);
+    const notificationTimeoutRef = useRef(null);
 
     useEffect(() => {
         // Load cart from localStorage
@@ -29,31 +30,27 @@ export default function InquiryCart() {
         }
     }, [cart]);
 
-    const addToCart = (product) => {
+    const addToCart = useCallback((product) => {
         setCart(prev => {
             const exists = prev.find(p => p.name === product.name);
             if (exists) {
                 // Show notification that product is already in cart (defer to avoid render issue)
-                requestAnimationFrame(() => {
-                    setTimeout(() => {
-                        if (window.showNotification) {
-                            window.showNotification(`${product.name} is already in your inquiry list`, 'info');
-                        }
-                    }, 0);
-                });
+                setTimeout(() => {
+                    if (window.showNotification) {
+                        window.showNotification(`${product.name} is already in your inquiry list`, 'info');
+                    }
+                }, 100);
                 return prev;
             }
             // Show success notification (defer to avoid render issue)
-            requestAnimationFrame(() => {
-                setTimeout(() => {
-                    if (window.showNotification) {
-                        window.showNotification(`${product.name} added to inquiry list`, 'success');
-                    }
-                }, 0);
-            });
+            setTimeout(() => {
+                if (window.showNotification) {
+                    window.showNotification(`${product.name} added to inquiry list`, 'success');
+                }
+            }, 100);
             return [...prev, product];
         });
-    };
+    }, []);
 
     const removeFromCart = (productName) => {
         setCart(prev => prev.filter(p => p.name !== productName));
@@ -69,7 +66,7 @@ export default function InquiryCart() {
         return () => {
             delete window.addProductToInquiry;
         };
-    }, []);
+    }, [addToCart]);
 
     if (cart.length === 0 && !isOpen) return null;
 
