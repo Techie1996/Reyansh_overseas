@@ -8,6 +8,8 @@ export default function InquiryCart() {
     const [isOpen, setIsOpen] = useState(false);
     const [showInquiry, setShowInquiry] = useState(false);
     const notificationTimeoutRef = useRef(null);
+    const lastNotificationRef = useRef({ product: null, time: 0 });
+    const processingRef = useRef(false);
 
     useEffect(() => {
         // Load cart from localStorage
@@ -31,22 +33,50 @@ export default function InquiryCart() {
     }, [cart]);
 
     const addToCart = useCallback((product) => {
+        // Prevent concurrent calls
+        if (processingRef.current) {
+            return;
+        }
+
+        processingRef.current = true;
+        const now = Date.now();
+        const timeSinceLastNotification = now - lastNotificationRef.current.time;
+        const isSameProduct = lastNotificationRef.current.product === product.name;
+
+        // Prevent duplicate notifications within 2000ms for the same product
+        if (isSameProduct && timeSinceLastNotification < 2000) {
+            processingRef.current = false;
+            return;
+        }
+
+        // Clear any pending notification timeout to prevent duplicates
+        if (notificationTimeoutRef.current) {
+            clearTimeout(notificationTimeoutRef.current);
+            notificationTimeoutRef.current = null;
+        }
+
         setCart(prev => {
             const exists = prev.find(p => p.name === product.name);
             if (exists) {
-                // Show notification that product is already in cart (defer to avoid render issue)
-                setTimeout(() => {
+                // Show notification that product is already in cart
+                notificationTimeoutRef.current = setTimeout(() => {
                     if (window.showNotification) {
                         window.showNotification(`${product.name} is already in your inquiry list`, 'info');
+                        lastNotificationRef.current = { product: product.name, time: Date.now() };
                     }
+                    notificationTimeoutRef.current = null;
+                    processingRef.current = false;
                 }, 100);
                 return prev;
             }
-            // Show success notification (defer to avoid render issue)
-            setTimeout(() => {
+            // Show success notification only once
+            notificationTimeoutRef.current = setTimeout(() => {
                 if (window.showNotification) {
                     window.showNotification(`${product.name} added to inquiry list`, 'success');
+                    lastNotificationRef.current = { product: product.name, time: Date.now() };
                 }
+                notificationTimeoutRef.current = null;
+                processingRef.current = false;
             }, 100);
             return [...prev, product];
         });

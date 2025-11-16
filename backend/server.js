@@ -8,7 +8,8 @@ app.use(express.json());
 const corsOptions = {
     origin: '*',
     methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type'],
+    allowedHeaders: ['Content-Type', 'Accept', 'Authorization'],
+    credentials: true
 };
 
 app.use(cors(corsOptions));
@@ -300,7 +301,12 @@ Please respond to: ${email}
 </html>
         `;
 
-        await transporter.sendMail({
+        console.log('Attempting to send email...');
+        console.log('From:', 'govindayadav2478@gmail.com');
+        console.log('To:', 'reyanshscientificworks@gmail.com');
+        console.log('Subject:', emailSubject);
+
+        const mailResult = await transporter.sendMail({
             from: 'Krishnawanshi Overseas Website <govindayadav2478@gmail.com>',
             to: 'reyanshscientificworks@gmail.com',
             replyTo: email,
@@ -309,12 +315,22 @@ Please respond to: ${email}
             html: emailHtml,
         });
 
+        console.log('Email sent successfully!');
+        console.log('Message ID:', mailResult.messageId);
+        console.log('Response:', mailResult.response);
+
         res.status(200).json({
             success: true,
             message: 'Product inquiry sent successfully. We will contact you soon!'
         });
     } catch (error) {
         console.error('Product inquiry error:', error);
+        console.error('Error details:', {
+            message: error.message,
+            code: error.code,
+            command: error.command,
+            response: error.response
+        });
         res.status(500).json({
             success: false,
             error: 'Failed to send inquiry. Please try again later.',

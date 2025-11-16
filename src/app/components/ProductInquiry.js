@@ -90,10 +90,11 @@ export default function ProductInquiry({ isOpen, onClose, selectedProducts = [] 
         try {
             const response = await fetch('https://reyansh-overseas.onrender.com/api/product-inquiry', {
                 method: 'POST',
-                headers: { 
+                headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 },
+                mode: 'cors',
                 body: JSON.stringify({
                     name: formData.name.trim(),
                     email: formData.email.trim().toLowerCase(),
@@ -109,12 +110,23 @@ export default function ProductInquiry({ isOpen, onClose, selectedProducts = [] 
                 }),
             });
 
+            if (!response.ok) {
+                const errorText = await response.text();
+                let errorData;
+                try {
+                    errorData = JSON.parse(errorText);
+                } catch {
+                    errorData = { error: errorText || `Server error: ${response.status} ${response.statusText}` };
+                }
+                throw new Error(errorData.error || errorData.errors?.join(', ') || `HTTP ${response.status}: ${response.statusText}`);
+            }
+
             const data = await response.json();
-            
+
             if (data.success) {
-                setStatus({ 
-                    type: 'success', 
-                    message: data.message || 'Your inquiry has been sent successfully! We will contact you soon.' 
+                setStatus({
+                    type: 'success',
+                    message: data.message || 'Your inquiry has been sent successfully! We will contact you soon.'
                 });
                 setFormData({
                     name: '',
@@ -130,16 +142,16 @@ export default function ProductInquiry({ isOpen, onClose, selectedProducts = [] 
                     setStatus(null);
                 }, 3000);
             } else {
-                const errorMessage = data.errors 
-                    ? data.errors.join(', ') 
+                const errorMessage = data.errors
+                    ? data.errors.join(', ')
                     : data.error || 'Failed to send inquiry. Please try again.';
                 setStatus({ type: 'error', message: errorMessage });
             }
         } catch (err) {
             console.error('Inquiry submission error:', err);
-            setStatus({ 
-                type: 'error', 
-                message: 'Network error. Please check your connection and try again.' 
+            setStatus({
+                type: 'error',
+                message: `Network error: ${err.message}. Please check your connection and try again.`
             });
         }
         setLoading(false);
