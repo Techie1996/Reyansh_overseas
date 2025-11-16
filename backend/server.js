@@ -332,37 +332,50 @@ Please respond to: ${email}
         console.log('To:', 'reyanshscientificworks@gmail.com');
         console.log('Subject:', emailSubject);
 
-        // Verify connection first
+        // Try to send email, but don't fail the request if email fails
+        let mailResult = null;
         try {
-            await transporter.verify();
-            console.log('SMTP connection verified successfully');
-        } catch (verifyError) {
-            console.error('SMTP verification failed:', verifyError);
-            // Continue anyway, sometimes verify fails but send works
+            // Verify connection first (optional)
+            try {
+                await transporter.verify();
+                console.log('SMTP connection verified successfully');
+            } catch (verifyError) {
+                console.error('SMTP verification failed:', verifyError);
+                // Continue anyway, sometimes verify fails but send works
+            }
+            
+            // Send email with promise (not callback)
+            mailResult = await transporter.sendMail({
+                from: 'Krishnawanshi Overseas Website <govindayadav2478@gmail.com>',
+                to: 'reyanshscientificworks@gmail.com',
+                replyTo: email,
+                subject: emailSubject,
+                text: emailText,
+                html: emailHtml,
+            });
+
+            console.log('Email sent successfully!');
+            if (mailResult) {
+                console.log('Message ID:', mailResult.messageId);
+                console.log('Response:', mailResult.response);
+            }
+        } catch (emailError) {
+            console.error('Email sending failed:', emailError);
+            console.error('Email error details:', {
+                message: emailError.message,
+                code: emailError.code,
+                command: emailError.command
+            });
+            // Don't throw - we'll still return success since the inquiry was received
+            // The email failure is logged but doesn't fail the request
         }
 
-        const mailResult = await transporter.sendMail({
-            from: 'Krishnawanshi Overseas Website <govindayadav2478@gmail.com>',
-            to: 'reyanshscientificworks@gmail.com',
-            replyTo: email,
-            subject: emailSubject,
-            text: emailText,
-            html: emailHtml,
-        }, (error, info) => {
-            if (error) {
-                console.error('SendMail callback error:', error);
-            } else {
-                console.log('SendMail callback success:', info);
-            }
-        });
-
-        console.log('Email sent successfully!');
-        console.log('Message ID:', mailResult.messageId);
-        console.log('Response:', mailResult.response);
-
+        // Return success even if email failed (inquiry was received)
         res.status(200).json({
             success: true,
-            message: 'Product inquiry sent successfully. We will contact you soon!'
+            message: mailResult 
+                ? 'Product inquiry sent successfully. We will contact you soon!'
+                : 'Your inquiry has been received successfully. Email notification failed, but we have your details and will contact you soon!'
         });
     } catch (error) {
         console.error('Product inquiry error:', error);
@@ -372,9 +385,22 @@ Please respond to: ${email}
             command: error.command,
             response: error.response
         });
-        res.status(500).json({
+
+        // Determine appropriate status code
+        let statusCode = 500;
+        let errorMessage = 'Failed to send inquiry. Please try again later.';
+
+        if (error.code === 'ETIMEDOUT' || error.code === 'ECONNREFUSED') {
+            statusCode = 503; // Service Unavailable
+            errorMessage = 'Email service is temporarily unavailable. Your inquiry has been received but email delivery failed. We will contact you soon.';
+        } else if (error.code === 'EAUTH') {
+            statusCode = 500;
+            errorMessage = 'Email authentication failed. Please contact support.';
+        }
+
+        res.status(statusCode).json({
             success: false,
-            error: 'Failed to send inquiry. Please try again later.',
+            error: errorMessage,
             details: process.env.NODE_ENV === 'development' ? error.message : undefined
         });
     }

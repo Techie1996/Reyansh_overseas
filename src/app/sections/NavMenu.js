@@ -213,6 +213,7 @@ export default function NavMenu() {
                             width: '100vw',
                             height: '100vh',
                             background: '#ffffff',
+                            backgroundColor: '#ffffff',
                             zIndex: 9999,
                             display: 'flex',
                             flexDirection: 'column',
@@ -220,7 +221,9 @@ export default function NavMenu() {
                             justifyContent: 'center',
                             padding: '2rem',
                             boxShadow: '-4px 0 20px rgba(0,0,0,0.1)',
-                            overflowY: 'auto'
+                            overflowY: 'auto',
+                            WebkitBackfaceVisibility: 'hidden',
+                            backfaceVisibility: 'hidden'
                         }}>
                         <motion.button
                             onClick={() => setMenuOpen(false)}

@@ -110,23 +110,39 @@ export default function ProductInquiry({ isOpen, onClose, selectedProducts = [] 
                 }),
             });
 
+            // Check if response is ok
             if (!response.ok) {
-                const errorText = await response.text();
-                let errorData;
+                let errorMessage = `Server error: ${response.status} ${response.statusText}`;
                 try {
-                    errorData = JSON.parse(errorText);
-                } catch {
-                    errorData = { error: errorText || `Server error: ${response.status} ${response.statusText}` };
+                    const errorText = await response.text();
+                    if (errorText) {
+                        const errorData = JSON.parse(errorText);
+                        errorMessage = errorData.error || errorData.errors?.join(', ') || errorText;
+                    }
+                } catch (parseError) {
+                    console.error('Error parsing response:', parseError);
                 }
-                throw new Error(errorData.error || errorData.errors?.join(', ') || `HTTP ${response.status}: ${response.statusText}`);
+                setStatus({ type: 'error', message: errorMessage });
+                setLoading(false);
+                return;
             }
 
-            const data = await response.json();
-
+            // Parse response
+            let data;
+            try {
+                const responseText = await response.text();
+                data = JSON.parse(responseText);
+            } catch (parseError) {
+                console.error('Error parsing JSON:', parseError);
+                setStatus({ type: 'error', message: 'Invalid response from server. Please try again.' });
+                setLoading(false);
+                return;
+            }
+            
             if (data.success) {
-                setStatus({
-                    type: 'success',
-                    message: data.message || 'Your inquiry has been sent successfully! We will contact you soon.'
+                setStatus({ 
+                    type: 'success', 
+                    message: data.message || 'Your inquiry has been sent successfully! We will contact you soon.' 
                 });
                 setFormData({
                     name: '',
@@ -142,19 +158,38 @@ export default function ProductInquiry({ isOpen, onClose, selectedProducts = [] 
                     setStatus(null);
                 }, 3000);
             } else {
-                const errorMessage = data.errors
-                    ? data.errors.join(', ')
+                const errorMessage = data.errors 
+                    ? data.errors.join(', ') 
                     : data.error || 'Failed to send inquiry. Please try again.';
                 setStatus({ type: 'error', message: errorMessage });
             }
         } catch (err) {
             console.error('Inquiry submission error:', err);
-            setStatus({
-                type: 'error',
-                message: `Network error: ${err.message}. Please check your connection and try again.`
+            console.error('Error details:', {
+                message: err.message,
+                stack: err.stack,
+                name: err.name
             });
+            
+            let errorMessage = 'Network error. Please check your connection and try again.';
+            
+            if (err.message) {
+                if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+                    errorMessage = 'Cannot connect to server. Please check your internet connection and try again.';
+                } else if (err.message.includes('timeout')) {
+                    errorMessage = 'Request timed out. The server may be busy. Please try again in a moment.';
+                } else {
+                    errorMessage = `Error: ${err.message}`;
+                }
+            }
+            
+            setStatus({ 
+                type: 'error', 
+                message: errorMessage
+            });
+        } finally {
+            setLoading(false);
         }
-        setLoading(false);
     };
 
     if (!isOpen) return null;
