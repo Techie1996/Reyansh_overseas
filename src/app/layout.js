@@ -17,12 +17,9 @@ export const metadata = {
   keywords: "laboratory glassware, scientific equipment, borosilicate glass, beakers, flasks, test tubes, laboratory supplies, pharmaceutical glassware",
   authors: [{ name: "Krishnawanshi Overseas" }],
   icons: {
-    icon: [
-      { url: '/4118.jpg', sizes: 'any' },
-      { url: '/4118.jpg', type: 'image/jpeg' }
-    ],
-    apple: '/4118.jpg',
+    icon: '/4118.jpg',
     shortcut: '/4118.jpg',
+    apple: '/4118.jpg',
   },
   openGraph: {
     title: "Krishnawanshi Overseas - Premium Laboratory Glassware",
