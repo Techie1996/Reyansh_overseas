@@ -125,10 +125,29 @@ import BackgroundMusic from '../components/BackgroundMusic';
 import InquiryCart from '../components/InquiryCart';
 import Notification from '../components/Notification';
 import HeroHeader from '../sections/HeroHeader';
+import Script from 'next/script';
 
 export default function ProductsPage() {
+    // Structured Data for Products Collection Page
+    const collectionSchema = {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "name": "Laboratory Glassware Products",
+        "description": "Complete range of laboratory glassware products including beakers, flasks, test tubes, and more",
+        "url": "https://krishnawanshioverseas.com/products",
+        "mainEntity": {
+            "@type": "ItemList",
+            "itemListElement": []
+        }
+    };
+
     return (
         <>
+            <Script
+                id="products-collection-schema"
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
+            />
             <BackgroundMusic />
             <Notification />
             <InquiryCart />

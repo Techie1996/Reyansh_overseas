@@ -42,10 +42,11 @@ export default function HeroHeader() {
                 >
                     <img
                         src="/4118.jpg"
-                        alt="Krishnawanshi Overseas Logo"
+                        alt="Krishnawanshi Overseas - Laboratory Glassware Manufacturer Logo"
+                        title="Krishnawanshi Overseas - Premium Laboratory Glassware"
                         width={50}
                         height={50}
-                        style={{
+                        style={{ 
                             borderRadius: 8,
                             width: 'clamp(40px, 4vw, 60px)',
                             height: 'clamp(40px, 4vw, 60px)'

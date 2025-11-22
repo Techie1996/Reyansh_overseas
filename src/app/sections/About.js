@@ -141,7 +141,8 @@ export default function About() {
                 >
                     <motion.img
                         src="/laboratory-supplies-medical-work.jpg"
-                        alt="Scientific Glassware"
+                        alt="Laboratory Glassware Manufacturing - Krishnawanshi Overseas Scientific Equipment Production"
+                        title="High-Quality Laboratory Glassware Manufacturing"
                         width={350}
                         height={250}
                         style={{ 
@@ -189,7 +190,8 @@ export default function About() {
                 >
                     <motion.img
                         src="/48448.jpg"
-                        alt="Colorful Glassware"
+                        alt="Krishnawanshi Overseas Laboratory Glassware Products - ISO Certified Scientific Equipment"
+                        title="Premium Laboratory Glassware Collection"
                         width={420}
                         height={180}
                         style={{ 

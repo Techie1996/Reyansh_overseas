@@ -107,8 +107,8 @@ export default function InquiryCart() {
                 animate={{ scale: 1 }}
                 style={{
                     position: 'fixed',
-                    bottom: '2rem',
-                    right: '2rem',
+                    bottom: 'clamp(5.5rem, 8vw, 7rem)',
+                    right: 'clamp(1rem, 3vw, 2rem)',
                     zIndex: 9999
                 }}
             >
@@ -121,15 +121,18 @@ export default function InquiryCart() {
                         color: '#ffffff',
                         border: 'none',
                         borderRadius: '50%',
-                        width: '64px',
-                        height: '64px',
+                        width: 'clamp(56px, 6vw, 64px)',
+                        height: 'clamp(56px, 6vw, 64px)',
+                        minWidth: 'clamp(56px, 6vw, 64px)',
+                        minHeight: 'clamp(56px, 6vw, 64px)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         cursor: 'pointer',
                         boxShadow: '0 8px 24px rgba(0,0,0,0.2)',
-                        fontSize: '1.5rem',
-                        position: 'relative'
+                        fontSize: 'clamp(1.25rem, 2vw, 1.5rem)',
+                        position: 'relative',
+                        flexShrink: 0
                     }}
                 >
                     🛒
@@ -144,16 +147,20 @@ export default function InquiryCart() {
                                 background: '#ef4444',
                                 color: '#ffffff',
                                 borderRadius: '50%',
-                                width: '24px',
-                                height: '24px',
+                                width: 'clamp(20px, 2.5vw, 24px)',
+                                height: 'clamp(20px, 2.5vw, 24px)',
+                                minWidth: 'clamp(20px, 2.5vw, 24px)',
+                                minHeight: 'clamp(20px, 2.5vw, 24px)',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                fontSize: '0.75rem',
-                                fontWeight: 600
+                                fontSize: 'clamp(0.625rem, 1vw, 0.75rem)',
+                                fontWeight: 600,
+                                border: '2px solid #ffffff',
+                                boxSizing: 'border-box'
                             }}
                         >
-                            {cart.length}
+                            {cart.length > 99 ? '99+' : cart.length}
                         </motion.span>
                     )}
                 </motion.button>
@@ -167,14 +174,15 @@ export default function InquiryCart() {
                         exit={{ opacity: 0 }}
                         style={{
                             position: 'fixed',
-                            bottom: '100px',
-                            right: '2rem',
+                            bottom: 'clamp(10rem, 15vw, 12rem)',
+                            right: 'clamp(1rem, 3vw, 2rem)',
                             zIndex: 9998,
                             background: '#ffffff',
                             borderRadius: '16px',
                             boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
-                            width: '380px',
-                            maxHeight: '500px',
+                            width: 'clamp(320px, 90vw, 380px)',
+                            maxWidth: 'calc(100vw - 2rem)',
+                            maxHeight: 'clamp(400px, 60vh, 500px)',
                             display: 'flex',
                             flexDirection: 'column'
                         }}

@@ -41,7 +41,8 @@ export default function Footer() {
                 >
                     <motion.img
                         src="/4118.jpg"
-                        alt="Scientific Glassware Logo"
+                        alt="Krishnawanshi Overseas - Laboratory Glassware Manufacturer Logo"
+                        title="Krishnawanshi Overseas - ISO Certified Laboratory Glassware"
                         width={60}
                         height={60}
                         style={{ 

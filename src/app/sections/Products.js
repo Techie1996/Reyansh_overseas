@@ -53,7 +53,8 @@ function ProductCard({ product, index }) {
                 }}>
                     <img
                         src={product.img}
-                        alt={product.name}
+                        alt={`${product.name} - Laboratory Glassware by Krishnawanshi Overseas. ${product.desc}. ISO certified scientific equipment.`}
+                        title={`${product.name} - ${product.desc}`}
                         style={{
                             width: '100%',
                             height: '100%',

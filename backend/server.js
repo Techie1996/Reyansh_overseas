@@ -2,7 +2,7 @@
 require('dotenv').config();
 
 const express = require('express');
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 const cors = require('cors');
 
 const app = express();
@@ -18,30 +18,18 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 
-// Email transporter configuration - optimized for Render.com
+// Resend API configuration - optimized for Render.com
 // Use environment variables for security
-const emailConfig = {
-    service: process.env.EMAIL_SERVICE || 'gmail',
-    auth: {
-        user: process.env.EMAIL_USER || 'govindayadav2478@gmail.com',
-        pass: process.env.EMAIL_PASSWORD || 'vboj hawo vwbh skum', // Gmail app password
-    },
-    // Let nodemailer auto-detect the best connection settings
-    connectionTimeout: 60000, // 60 seconds
-    greetingTimeout: 30000,
-    socketTimeout: 60000,
-    // Additional options for better reliability on Render
-    pool: true,
-    maxConnections: 1,
-    maxMessages: 3,
-    rateDelta: 1000,
-    rateLimit: 5
-};
-
-const transporter = nodemailer.createTransport(emailConfig);
-
-// Recipient email from environment variable
+const RESEND_API_KEY = process.env.RESEND_API_KEY || 're_jPZGoJuF_D4sGBstPYhB9XgDVxPQYEqfA';
+const FROM_EMAIL = process.env.FROM_EMAIL || 'onboarding@resend.dev'; // Must be verified domain or use onboarding@resend.dev
 const RECIPIENT_EMAIL = process.env.RECIPIENT_EMAIL || 'reyanshscientificworks@gmail.com';
+
+// Initialize Resend
+const resend = new Resend(RESEND_API_KEY);
+
+console.log('✅ Resend API initialized');
+console.log('📧 From email:', FROM_EMAIL);
+console.log('📧 Recipient email:', RECIPIENT_EMAIL);
 
 // Validation helper
 function validateEmail(email) {
@@ -137,24 +125,15 @@ ${type === 'product_inquiry' ? '\nType: Product Inquiry' : ''}
 </html>
         `;
 
-        // Verify connection first (optional, but helps debug)
-        try {
-            await transporter.verify();
-            console.log('✅ SMTP connection verified for contact form');
-        } catch (verifyError) {
-            console.error('❌ SMTP verification failed:', verifyError.message);
-            // Don't fail the request if verification fails, but log it
-        }
-
-        // Retry logic for email sending
+        // Send email using Resend API
         let mailResult;
         let lastError;
         const maxRetries = 3;
-        
+
         for (let attempt = 1; attempt <= maxRetries; attempt++) {
             try {
-                mailResult = await transporter.sendMail({
-                    from: `Krishnawanshi Overseas Website <${emailConfig.auth.user}>`,
+                mailResult = await resend.emails.send({
+                    from: `Krishnawanshi Overseas <${FROM_EMAIL}>`,
                     to: RECIPIENT_EMAIL,
                     replyTo: email,
                     subject: subject,
@@ -162,11 +141,13 @@ ${type === 'product_inquiry' ? '\nType: Product Inquiry' : ''}
                     html: emailHtml,
                 });
                 console.log(`✅ Contact form email sent successfully on attempt ${attempt}!`);
+                console.log('Email ID:', mailResult.data?.id);
                 break; // Success, exit retry loop
             } catch (sendError) {
                 lastError = sendError;
                 console.error(`❌ Email send attempt ${attempt} failed:`, sendError.message);
-                
+                console.error('Error details:', sendError);
+
                 if (attempt < maxRetries) {
                     const waitTime = attempt * 2000; // Exponential backoff: 2s, 4s, 6s
                     console.log(`⏳ Retrying in ${waitTime}ms...`);
@@ -174,13 +155,13 @@ ${type === 'product_inquiry' ? '\nType: Product Inquiry' : ''}
                 }
             }
         }
-        
+
         if (!mailResult) {
             throw lastError || new Error('Failed to send email after all retries');
         }
 
-        console.log('Contact form email sent successfully!');
-        console.log('Message ID:', mailResult.messageId);
+        console.log('✅ Contact form email sent successfully!');
+        console.log('Email ID:', mailResult.data?.id);
 
         res.status(200).json({
             success: true,
@@ -357,27 +338,19 @@ Please respond to: ${email}
         `;
 
         console.log('📧 Attempting to send product inquiry email...');
-        console.log('From:', emailConfig.auth.user);
+        console.log('From:', FROM_EMAIL);
         console.log('To:', RECIPIENT_EMAIL);
         console.log('Subject:', emailSubject);
 
-        // Verify connection first
-        try {
-            await transporter.verify();
-            console.log('✅ SMTP connection verified for product inquiry');
-        } catch (verifyError) {
-            console.error('❌ SMTP verification failed:', verifyError.message);
-        }
-
-        // Retry logic for email sending
+        // Send email using Resend API with retry logic
         let mailResult;
         let lastError;
         const maxRetries = 3;
-        
+
         for (let attempt = 1; attempt <= maxRetries; attempt++) {
             try {
-                mailResult = await transporter.sendMail({
-                    from: `Krishnawanshi Overseas Website <${emailConfig.auth.user}>`,
+                mailResult = await resend.emails.send({
+                    from: `Krishnawanshi Overseas <${FROM_EMAIL}>`,
                     to: RECIPIENT_EMAIL,
                     replyTo: email,
                     subject: emailSubject,
@@ -385,11 +358,13 @@ Please respond to: ${email}
                     html: emailHtml,
                 });
                 console.log(`✅ Product inquiry email sent successfully on attempt ${attempt}!`);
+                console.log('Email ID:', mailResult.data?.id);
                 break; // Success, exit retry loop
             } catch (sendError) {
                 lastError = sendError;
                 console.error(`❌ Email send attempt ${attempt} failed:`, sendError.message);
-                
+                console.error('Error details:', sendError);
+
                 if (attempt < maxRetries) {
                     const waitTime = attempt * 2000; // Exponential backoff: 2s, 4s, 6s
                     console.log(`⏳ Retrying in ${waitTime}ms...`);
@@ -397,14 +372,13 @@ Please respond to: ${email}
                 }
             }
         }
-        
+
         if (!mailResult) {
             throw lastError || new Error('Failed to send email after all retries');
         }
 
         console.log('✅ Product inquiry email sent successfully!');
-        console.log('Message ID:', mailResult.messageId);
-        console.log('Response:', mailResult.response);
+        console.log('Email ID:', mailResult.data?.id);
 
         res.status(200).json({
             success: true,
@@ -414,21 +388,26 @@ Please respond to: ${email}
         console.error('Product inquiry error:', error);
         console.error('Error details:', {
             message: error.message,
-            code: error.code,
-            command: error.command,
-            response: error.response
+            name: error.name,
+            statusCode: error.statusCode
         });
 
-        // Determine appropriate status code
+        // Determine appropriate status code for Resend errors
         let statusCode = 500;
         let errorMessage = 'Failed to send inquiry. Please try again later.';
 
-        if (error.code === 'ETIMEDOUT' || error.code === 'ECONNREFUSED') {
-            statusCode = 503; // Service Unavailable
-            errorMessage = 'Email service is temporarily unavailable. Your inquiry has been received but email delivery failed. We will contact you soon.';
-        } else if (error.code === 'EAUTH') {
-            statusCode = 500;
-            errorMessage = 'Email authentication failed. Please contact support.';
+        if (error.message?.includes('rate limit') || error.message?.includes('429') || error.statusCode === 429) {
+            statusCode = 429; // Too Many Requests
+            errorMessage = 'Too many requests. Please try again in a moment.';
+        } else if (error.message?.includes('invalid') || error.message?.includes('unauthorized') || error.statusCode === 401) {
+            statusCode = 401;
+            errorMessage = 'Email service configuration error. Please contact support.';
+        } else if (error.message?.includes('domain') || error.message?.includes('verification') || error.statusCode === 422) {
+            statusCode = 400;
+            errorMessage = 'Email domain not verified. Please contact support.';
+        } else if (error.statusCode === 503) {
+            statusCode = 503;
+            errorMessage = 'Email service is temporarily unavailable. Please try again later.';
         }
 
         res.status(statusCode).json({
@@ -451,5 +430,7 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
     console.log(`✅ Krishnawanshi Overseas Backend API running on port ${PORT}`);
-    console.log(`📧 Email service configured`);
+    console.log(`📧 Resend API configured`);
+    console.log(`📧 From: ${FROM_EMAIL}`);
+    console.log(`📧 To: ${RECIPIENT_EMAIL}`);
 }); 

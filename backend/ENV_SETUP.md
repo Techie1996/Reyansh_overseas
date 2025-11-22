@@ -4,29 +4,22 @@
 
 To deploy this backend on Render, you need to set the following environment variables in your Render dashboard:
 
-### Email Configuration
+### Email Configuration (Resend API)
 
-1. **EMAIL_SERVICE** (optional, defaults to 'gmail')
-   - Email service provider
-   - Example: `gmail`
+1. **RESEND_API_KEY** (required)
+   - Your Resend API key
+   - Get it from: https://resend.com/api-keys
+   - Example: `re_jPZGoJuF_D4sGBstPYhB9XgDVxPQYEqfA`
 
-2. **EMAIL_USER** (required)
-   - Your Gmail address
-   - Example: `your-email@gmail.com`
+2. **FROM_EMAIL** (required)
+   - Email address to send from
+   - For testing: `onboarding@resend.dev`
+   - For production: Use your verified domain (e.g., `noreply@yourdomain.com`)
+   - Example: `onboarding@resend.dev`
 
-3. **EMAIL_PASSWORD** (required)
-   - Gmail App Password (NOT your regular password)
-   - To generate an App Password:
-     1. Go to https://myaccount.google.com/
-     2. Enable 2-Step Verification if not already enabled
-     3. Go to https://myaccount.google.com/apppasswords
-     4. Generate a new app password for "Mail"
-     5. Copy the 16-character password (spaces will be removed automatically)
-   - Example: `abcd efgh ijkl mnop`
-
-4. **RECIPIENT_EMAIL** (optional, defaults to 'reyanshscientificworks@gmail.com')
+3. **RECIPIENT_EMAIL** (required)
    - Email address where contact form submissions will be sent
-   - Example: `your-recipient@gmail.com`
+   - Example: `reyanshscientificworks@gmail.com`
 
 ### Server Configuration
 
@@ -52,9 +45,8 @@ To deploy this backend on Render, you need to set the following environment vari
 Create a `.env` file in the `backend` directory:
 
 ```
-EMAIL_SERVICE=gmail
-EMAIL_USER=govindayadav2478@gmail.com
-EMAIL_PASSWORD=vboj hawo vwbh skum
+RESEND_API_KEY=re_jPZGoJuF_D4sGBstPYhB9XgDVxPQYEqfA
+FROM_EMAIL=onboarding@resend.dev
 RECIPIENT_EMAIL=reyanshscientificworks@gmail.com
 PORT=8080
 NODE_ENV=development
@@ -66,17 +58,18 @@ NODE_ENV=development
 
 ### Email not sending on Render
 
-1. **Check Gmail App Password**: Make sure you're using an App Password, not your regular Gmail password
-2. **Check 2-Step Verification**: App Passwords only work if 2-Step Verification is enabled
+1. **Check Resend API Key**: Verify `RESEND_API_KEY` is set correctly in Render
+2. **Check FROM_EMAIL**: Ensure it's set to `onboarding@resend.dev` or your verified domain
 3. **Check Environment Variables**: Verify all environment variables are set correctly in Render
 4. **Check Logs**: View Render logs to see detailed error messages
-5. **Test Connection**: The server will log SMTP verification status on startup
+5. **Verify Domain**: If using custom domain, ensure it's verified in Resend dashboard
 
 ### Common Errors
 
-- **EAUTH**: Authentication failed - Check your EMAIL_USER and EMAIL_PASSWORD
-- **ETIMEDOUT**: Connection timeout - Check your internet connection or Gmail service status
-- **ECONNREFUSED**: Connection refused - Gmail may be blocking the connection
+- **401 Unauthorized**: Invalid API key - Check your RESEND_API_KEY
+- **422 Unprocessable**: Invalid email format or domain not verified
+- **429 Too Many Requests**: Rate limit exceeded (100 emails/day on free tier)
+- **Domain not verified**: Use `onboarding@resend.dev` for testing or verify your domain
 
 ## Security Notes
 

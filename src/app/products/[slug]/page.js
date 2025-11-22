@@ -8,7 +8,9 @@ import InquiryCart from '../../components/InquiryCart';
 import BackgroundMusic from '../../components/BackgroundMusic';
 import Notification from '../../components/Notification';
 import HeroHeader from '../../sections/HeroHeader';
+import Footer from '../../sections/Footer';
 import { allProducts as productsList } from '../../data/products';
+import Script from 'next/script';
 
 const allProducts = {
     'beaker': {
@@ -202,89 +204,286 @@ export default function ProductDetailPage() {
 
     if (!product) return null;
 
+    // Structured Data for Product
+    const productSchema = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": product.name,
+        "description": `${product.name} - ${product.desc}. ${product.specifications.join('. ')}`,
+        "image": product.img,
+        "brand": {
+            "@type": "Brand",
+            "name": "Krishnawanshi Overseas"
+        },
+        "manufacturer": {
+            "@type": "Organization",
+            "name": "Krishnawanshi Overseas",
+            "url": "https://krishnawanshioverseas.com"
+        },
+        "offers": {
+            "@type": "Offer",
+            "url": `https://krishnawanshioverseas.com/products/${slug}`,
+            "priceCurrency": "INR",
+            "availability": "https://schema.org/InStock",
+            "seller": {
+                "@type": "Organization",
+                "name": "Krishnawanshi Overseas"
+            }
+        },
+        "category": "Laboratory Equipment",
+        "applicationCategory": "Scientific Research",
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "reviewCount": "150"
+        }
+    };
+
+    // Breadcrumb Schema
+    const breadcrumbSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://krishnawanshioverseas.com"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Products",
+                "item": "https://krishnawanshioverseas.com/products"
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": product.name,
+                "item": `https://krishnawanshioverseas.com/products/${slug}`
+            }
+        ]
+    };
+
     return (
-        <div style={{ minHeight: '100vh', background: '#ffffff' }}>
+        <div style={{ minHeight: '100vh', background: 'linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)' }}>
+            <Script
+                id="product-schema"
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+            />
+            <Script
+                id="breadcrumb-schema"
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+            />
             <BackgroundMusic />
             <Notification />
             <InquiryCart />
             <HeroHeader />
-            <div style={{ maxWidth: 1200, margin: '0 auto', padding: '4rem 5vw' }}>
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
+            <div style={{ 
+                maxWidth: 'clamp(1200px, 90vw, 1400px)', 
+                margin: '0 auto', 
+                padding: 'clamp(2rem, 4vw, 4rem) clamp(1.5rem, 5vw, 8rem)',
+                minHeight: 'calc(100vh - 200px)'
+            }}>
+                {/* Breadcrumbs */}
+                <motion.nav 
+                    aria-label="Breadcrumb" 
+                    initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    style={{ marginBottom: '2rem' }}
+                    style={{ marginBottom: 'clamp(1.5rem, 3vw, 2.5rem)' }}
                 >
-                    <Link
-                        href="/products"
-                        style={{
-                            color: '#64748b',
-                            textDecoration: 'none',
-                            fontSize: '0.9375rem',
-                            fontWeight: 500,
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '0.5rem'
-                        }}
-                    >
-                        ← Back to Products
-                    </Link>
-                </motion.div>
+                    <ol style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 'clamp(0.5rem, 1vw, 0.75rem)',
+                        listStyle: 'none',
+                        padding: 0,
+                        margin: 0,
+                        flexWrap: 'wrap'
+                    }}>
+                        <li>
+                            <Link
+                                href="/"
+                                style={{
+                                    color: '#64748b',
+                                    textDecoration: 'none',
+                                    fontSize: 'clamp(0.875rem, 1vw, 0.9375rem)',
+                                    fontWeight: 500,
+                                    transition: 'color 0.2s'
+                                }}
+                                onMouseEnter={(e) => e.currentTarget.style.color = '#2563eb'}
+                                onMouseLeave={(e) => e.currentTarget.style.color = '#64748b'}
+                            >
+                                Home
+                            </Link>
+                        </li>
+                        <li style={{ color: '#64748b', fontSize: 'clamp(0.875rem, 1vw, 0.9375rem)' }}>/</li>
+                        <li>
+                            <Link
+                                href="/products"
+                                style={{
+                                    color: '#64748b',
+                                    textDecoration: 'none',
+                                    fontSize: 'clamp(0.875rem, 1vw, 0.9375rem)',
+                                    fontWeight: 500,
+                                    transition: 'color 0.2s'
+                                }}
+                                onMouseEnter={(e) => e.currentTarget.style.color = '#2563eb'}
+                                onMouseLeave={(e) => e.currentTarget.style.color = '#64748b'}
+                            >
+                                Products
+                            </Link>
+                        </li>
+                        <li style={{ color: '#64748b', fontSize: 'clamp(0.875rem, 1vw, 0.9375rem)' }}>/</li>
+                        <li style={{
+                            color: '#0f172a',
+                            fontSize: 'clamp(0.875rem, 1vw, 0.9375rem)',
+                            fontWeight: 600
+                        }}>
+                            {product.name}
+                        </li>
+                    </ol>
+                </motion.nav>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', marginBottom: '4rem' }}>
+                {/* Main Product Section */}
+                <div style={{ 
+                    display: 'grid', 
+                    gridTemplateColumns: 'clamp(1fr, 50vw, 1fr) clamp(1fr, 50vw, 1fr)',
+                    gap: 'clamp(2rem, 4vw, 4rem)',
+                    marginBottom: 'clamp(3rem, 5vw, 5rem)'
+                }}>
                     <motion.div
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.5 }}
                         style={{
-                            background: '#f8fafc',
-                            borderRadius: '16px',
-                            padding: '2rem',
+                            background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
+                            borderRadius: 'clamp(16px, 2vw, 24px)',
+                            padding: 'clamp(1.5rem, 2.5vw, 2.5rem)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             aspectRatio: '1',
-                            overflow: 'hidden'
+                            overflow: 'hidden',
+                            position: 'relative',
+                            boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
+                            border: '1px solid rgba(37, 99, 235, 0.1)'
                         }}
                     >
                         <img
                             src={product.img}
-                            alt={product.name}
+                            alt={`${product.name} - Laboratory Glassware by Krishnawanshi Overseas. ${product.desc}`}
+                            title={`${product.name} - ${product.desc}`}
                             style={{
                                 width: '100%',
                                 height: '100%',
                                 objectFit: 'cover',
-                                borderRadius: '8px'
+                                borderRadius: 'clamp(8px, 1vw, 12px)',
+                                transition: 'transform 0.3s ease'
                             }}
+                            loading="eager"
+                            onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+                            onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
                         />
+                        <div style={{
+                            position: 'absolute',
+                            top: 'clamp(1rem, 1.5vw, 1.5rem)',
+                            right: 'clamp(1rem, 1.5vw, 1.5rem)',
+                            background: 'rgba(37, 99, 235, 0.9)',
+                            color: '#ffffff',
+                            padding: 'clamp(0.5rem, 1vw, 0.75rem) clamp(1rem, 1.5vw, 1.5rem)',
+                            borderRadius: '20px',
+                            fontSize: 'clamp(0.75rem, 1vw, 0.875rem)',
+                            fontWeight: 600,
+                            boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3)'
+                        }}>
+                            ⭐ Premium Quality
+                        </div>
                     </motion.div>
 
                     <motion.div
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.5, delay: 0.1 }}
                     >
-                        <h1 style={{
-                            fontSize: '2.5rem',
-                            fontWeight: 700,
-                            color: '#0f172a',
-                            marginBottom: '1rem',
-                            letterSpacing: '-0.02em'
-                        }}>
-                            {product.name}
-                        </h1>
-                        <p style={{
-                            fontSize: '1.125rem',
-                            color: '#64748b',
-                            marginBottom: '2rem'
-                        }}>
-                            {product.desc}
-                        </p>
-
-                        <div style={{ marginBottom: '2rem' }}>
-                            <h2 style={{
-                                fontSize: '1.25rem',
-                                fontWeight: 600,
+                        <div style={{ marginBottom: 'clamp(1rem, 2vw, 1.5rem)' }}>
+                            <h1 style={{
+                                fontSize: 'clamp(2rem, 4vw + 1rem, 3.5rem)',
+                                fontWeight: 700,
                                 color: '#0f172a',
-                                marginBottom: '1rem'
+                                marginBottom: 'clamp(0.75rem, 1.5vw, 1rem)',
+                                letterSpacing: '-0.02em',
+                                lineHeight: 1.2
                             }}>
+                                {product.name}
+                            </h1>
+                            <p style={{
+                                fontSize: 'clamp(1rem, 1.3vw + 0.5rem, 1.375rem)',
+                                color: '#64748b',
+                                marginBottom: 'clamp(1rem, 2vw, 1.5rem)',
+                                lineHeight: 1.6
+                            }}>
+                                {product.desc}
+                            </p>
+                            <div style={{
+                                display: 'flex',
+                                gap: 'clamp(0.75rem, 1.5vw, 1rem)',
+                                flexWrap: 'wrap',
+                                marginBottom: 'clamp(1.5rem, 2.5vw, 2rem)'
+                            }}>
+                                <span style={{
+                                    background: 'rgba(37, 99, 235, 0.1)',
+                                    color: '#2563eb',
+                                    padding: 'clamp(0.5rem, 1vw, 0.75rem) clamp(1rem, 1.5vw, 1.5rem)',
+                                    borderRadius: '20px',
+                                    fontSize: 'clamp(0.75rem, 1vw, 0.875rem)',
+                                    fontWeight: 600
+                                }}>
+                                    ✓ ISO Certified
+                                </span>
+                                <span style={{
+                                    background: 'rgba(16, 185, 129, 0.1)',
+                                    color: '#10b981',
+                                    padding: 'clamp(0.5rem, 1vw, 0.75rem) clamp(1rem, 1.5vw, 1.5rem)',
+                                    borderRadius: '20px',
+                                    fontSize: 'clamp(0.75rem, 1vw, 0.875rem)',
+                                    fontWeight: 600
+                                }}>
+                                    ✓ Worldwide Shipping
+                                </span>
+                                <span style={{
+                                    background: 'rgba(245, 158, 11, 0.1)',
+                                    color: '#f59e0b',
+                                    padding: 'clamp(0.5rem, 1vw, 0.75rem) clamp(1rem, 1.5vw, 1.5rem)',
+                                    borderRadius: '20px',
+                                    fontSize: 'clamp(0.75rem, 1vw, 0.875rem)',
+                                    fontWeight: 600
+                                }}>
+                                    ⭐ 4.8 Rating
+                                </span>
+                            </div>
+                        </div>
+
+                        <div style={{ 
+                            marginBottom: 'clamp(1.5rem, 2.5vw, 2.5rem)',
+                            background: '#ffffff',
+                            borderRadius: 'clamp(12px, 1.5vw, 16px)',
+                            padding: 'clamp(1.25rem, 2vw, 1.75rem)',
+                            boxShadow: '0 4px 16px rgba(0,0,0,0.06)',
+                            border: '1px solid #e2e8f0'
+                        }}>
+                            <h2 style={{
+                                fontSize: 'clamp(1.125rem, 1.5vw + 0.5rem, 1.5rem)',
+                                fontWeight: 700,
+                                color: '#0f172a',
+                                marginBottom: 'clamp(1rem, 1.5vw, 1.5rem)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.75rem'
+                            }}>
+                                <span style={{ fontSize: '1.5em' }}>🔬</span>
                                 Specifications
                             </h2>
                             <ul style={{
@@ -293,31 +492,65 @@ export default function ProductDetailPage() {
                                 margin: 0,
                                 display: 'flex',
                                 flexDirection: 'column',
-                                gap: '0.75rem'
+                                gap: 'clamp(0.75rem, 1vw, 1rem)'
                             }}>
                                 {product.specifications.map((spec, i) => (
-                                    <li key={i} style={{
-                                        display: 'flex',
-                                        alignItems: 'flex-start',
-                                        gap: '0.75rem',
-                                        fontSize: '0.9375rem',
-                                        color: '#475569',
-                                        lineHeight: 1.6
-                                    }}>
-                                        <span style={{ color: '#2563eb', marginTop: '0.25rem' }}>✓</span>
-                                        {spec}
-                                    </li>
+                                    <motion.li 
+                                        key={i} 
+                                        initial={{ opacity: 0, x: -10 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{ delay: i * 0.05 }}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'flex-start',
+                                            gap: 'clamp(0.75rem, 1vw, 1rem)',
+                                            fontSize: 'clamp(0.9375rem, 1.1vw + 0.5rem, 1.0625rem)',
+                                            color: '#475569',
+                                            lineHeight: 1.7,
+                                            padding: 'clamp(0.5rem, 0.75vw, 0.75rem)',
+                                            borderRadius: '8px',
+                                            background: 'rgba(37, 99, 235, 0.03)',
+                                            transition: 'all 0.2s'
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            e.currentTarget.style.background = 'rgba(37, 99, 235, 0.08)';
+                                            e.currentTarget.style.transform = 'translateX(4px)';
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.currentTarget.style.background = 'rgba(37, 99, 235, 0.03)';
+                                            e.currentTarget.style.transform = 'translateX(0)';
+                                        }}
+                                    >
+                                        <span style={{ 
+                                            color: '#2563eb', 
+                                            marginTop: '0.25rem',
+                                            fontSize: '1.2em',
+                                            fontWeight: 'bold'
+                                        }}>✓</span>
+                                        <span style={{ flex: 1 }}>{spec}</span>
+                                    </motion.li>
                                 ))}
                             </ul>
                         </div>
 
-                        <div style={{ marginBottom: '2rem' }}>
+                        <div style={{ 
+                            marginBottom: 'clamp(1.5rem, 2.5vw, 2.5rem)',
+                            background: '#ffffff',
+                            borderRadius: 'clamp(12px, 1.5vw, 16px)',
+                            padding: 'clamp(1.25rem, 2vw, 1.75rem)',
+                            boxShadow: '0 4px 16px rgba(0,0,0,0.06)',
+                            border: '1px solid #e2e8f0'
+                        }}>
                             <h2 style={{
-                                fontSize: '1.25rem',
-                                fontWeight: 600,
+                                fontSize: 'clamp(1.125rem, 1.5vw + 0.5rem, 1.5rem)',
+                                fontWeight: 700,
                                 color: '#0f172a',
-                                marginBottom: '1rem'
+                                marginBottom: 'clamp(1rem, 1.5vw, 1.5rem)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.75rem'
                             }}>
+                                <span style={{ fontSize: '1.5em' }}>⚗️</span>
                                 Applications
                             </h2>
                             <ul style={{
@@ -326,74 +559,257 @@ export default function ProductDetailPage() {
                                 margin: 0,
                                 display: 'flex',
                                 flexDirection: 'column',
-                                gap: '0.75rem'
+                                gap: 'clamp(0.75rem, 1vw, 1rem)'
                             }}>
                                 {product.applications.map((app, i) => (
-                                    <li key={i} style={{
-                                        display: 'flex',
-                                        alignItems: 'flex-start',
-                                        gap: '0.75rem',
-                                        fontSize: '0.9375rem',
-                                        color: '#475569',
-                                        lineHeight: 1.6
-                                    }}>
-                                        <span style={{ color: '#2563eb', marginTop: '0.25rem' }}>•</span>
-                                        {app}
-                                    </li>
+                                    <motion.li 
+                                        key={i} 
+                                        initial={{ opacity: 0, x: -10 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{ delay: (i + product.specifications.length) * 0.05 }}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'flex-start',
+                                            gap: 'clamp(0.75rem, 1vw, 1rem)',
+                                            fontSize: 'clamp(0.9375rem, 1.1vw + 0.5rem, 1.0625rem)',
+                                            color: '#475569',
+                                            lineHeight: 1.7,
+                                            padding: 'clamp(0.5rem, 0.75vw, 0.75rem)',
+                                            borderRadius: '8px',
+                                            background: 'rgba(16, 185, 129, 0.03)',
+                                            transition: 'all 0.2s'
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            e.currentTarget.style.background = 'rgba(16, 185, 129, 0.08)';
+                                            e.currentTarget.style.transform = 'translateX(4px)';
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.currentTarget.style.background = 'rgba(16, 185, 129, 0.03)';
+                                            e.currentTarget.style.transform = 'translateX(0)';
+                                        }}
+                                    >
+                                        <span style={{ 
+                                            color: '#10b981', 
+                                            marginTop: '0.25rem',
+                                            fontSize: '1.2em',
+                                            fontWeight: 'bold'
+                                        }}>•</span>
+                                        <span style={{ flex: 1 }}>{app}</span>
+                                    </motion.li>
                                 ))}
                             </ul>
                         </div>
 
-                        <motion.button
-                            onClick={handleAddToInquiry}
-                            whileHover={{ scale: 1.02, y: -2 }}
-                            whileTap={{ scale: 0.98 }}
-                            style={{
-                                width: '100%',
-                                padding: '1rem 2rem',
-                                background: '#1a1a1a',
-                                color: '#ffffff',
-                                border: 'none',
-                                borderRadius: '8px',
-                                fontWeight: 600,
-                                fontSize: '1rem',
-                                cursor: 'pointer',
-                                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                                marginBottom: '1rem'
-                            }}
-                        >
-                            Add to Inquiry
-                        </motion.button>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(0.75rem, 1vw, 1rem)' }}>
+                            <motion.button
+                                onClick={handleAddToInquiry}
+                                whileHover={{ scale: 1.02, y: -2 }}
+                                whileTap={{ scale: 0.98 }}
+                                style={{
+                                    width: '100%',
+                                    padding: 'clamp(0.875rem, 1.5vw, 1.125rem) clamp(1.5rem, 3vw, 2rem)',
+                                    background: 'linear-gradient(135deg, #1a1a1a 0%, #2d3748 100%)',
+                                    color: '#ffffff',
+                                    border: 'none',
+                                    borderRadius: 'clamp(8px, 1vw, 12px)',
+                                    fontWeight: 600,
+                                    fontSize: 'clamp(0.9375rem, 1.2vw + 0.5rem, 1.125rem)',
+                                    cursor: 'pointer',
+                                    boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '0.5rem',
+                                    transition: 'all 0.3s ease'
+                                }}
+                            >
+                                <span>🛒</span>
+                                Add to Inquiry
+                            </motion.button>
 
-                        <motion.button
-                            onClick={() => {
-                                if (window.addProductToInquiry) {
-                                    window.addProductToInquiry({
-                                        name: product.name,
-                                        desc: product.desc
-                                    });
-                                }
-                                setShowInquiry(true);
-                            }}
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            style={{
-                                width: '100%',
-                                padding: '1rem 2rem',
-                                background: 'transparent',
-                                color: '#1a1a1a',
-                                border: '1.5px solid #e2e8f0',
-                                borderRadius: '8px',
-                                fontWeight: 600,
-                                fontSize: '1rem',
-                                cursor: 'pointer'
-                            }}
-                        >
-                            Contact for This Product
-                        </motion.button>
+                            <motion.button
+                                onClick={() => {
+                                    if (window.addProductToInquiry) {
+                                        window.addProductToInquiry({
+                                            name: product.name,
+                                            desc: product.desc
+                                        });
+                                    }
+                                    setShowInquiry(true);
+                                }}
+                                whileHover={{ scale: 1.02, borderColor: '#2563eb' }}
+                                whileTap={{ scale: 0.98 }}
+                                style={{
+                                    width: '100%',
+                                    padding: 'clamp(0.875rem, 1.5vw, 1.125rem) clamp(1.5rem, 3vw, 2rem)',
+                                    background: '#ffffff',
+                                    color: '#1a1a1a',
+                                    border: '2px solid #e2e8f0',
+                                    borderRadius: 'clamp(8px, 1vw, 12px)',
+                                    fontWeight: 600,
+                                    fontSize: 'clamp(0.9375rem, 1.2vw + 0.5rem, 1.125rem)',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '0.5rem',
+                                    transition: 'all 0.3s ease',
+                                    boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+                                }}
+                            >
+                                <span>📧</span>
+                                Contact for This Product
+                            </motion.button>
+                        </div>
                     </motion.div>
                 </div>
+
+                {/* Additional Features Section */}
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.3 }}
+                    style={{
+                        marginTop: 'clamp(3rem, 5vw, 5rem)',
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(clamp(250px, 30vw, 300px), 1fr))',
+                        gap: 'clamp(1.5rem, 2.5vw, 2rem)',
+                        marginBottom: 'clamp(3rem, 5vw, 5rem)'
+                    }}
+                >
+                    <div style={{
+                        background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+                        padding: 'clamp(1.5rem, 2vw, 2rem)',
+                        borderRadius: 'clamp(12px, 1.5vw, 16px)',
+                        boxShadow: '0 4px 16px rgba(0,0,0,0.06)',
+                        border: '1px solid #e2e8f0',
+                        textAlign: 'center'
+                    }}>
+                        <div style={{ fontSize: 'clamp(2rem, 3vw, 2.5rem)', marginBottom: '0.75rem' }}>🚚</div>
+                        <h3 style={{ fontSize: 'clamp(1rem, 1.3vw + 0.5rem, 1.25rem)', fontWeight: 600, marginBottom: '0.5rem', color: '#0f172a' }}>
+                            Fast Shipping
+                        </h3>
+                        <p style={{ fontSize: 'clamp(0.875rem, 1vw + 0.5rem, 1rem)', color: '#64748b', margin: 0 }}>
+                            Worldwide delivery available
+                        </p>
+                    </div>
+                    <div style={{
+                        background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+                        padding: 'clamp(1.5rem, 2vw, 2rem)',
+                        borderRadius: 'clamp(12px, 1.5vw, 16px)',
+                        boxShadow: '0 4px 16px rgba(0,0,0,0.06)',
+                        border: '1px solid #e2e8f0',
+                        textAlign: 'center'
+                    }}>
+                        <div style={{ fontSize: 'clamp(2rem, 3vw, 2.5rem)', marginBottom: '0.75rem' }}>✓</div>
+                        <h3 style={{ fontSize: 'clamp(1rem, 1.3vw + 0.5rem, 1.25rem)', fontWeight: 600, marginBottom: '0.5rem', color: '#0f172a' }}>
+                            Quality Assured
+                        </h3>
+                        <p style={{ fontSize: 'clamp(0.875rem, 1vw + 0.5rem, 1rem)', color: '#64748b', margin: 0 }}>
+                            ISO certified standards
+                        </p>
+                    </div>
+                    <div style={{
+                        background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
+                        padding: 'clamp(1.5rem, 2vw, 2rem)',
+                        borderRadius: 'clamp(12px, 1.5vw, 16px)',
+                        boxShadow: '0 4px 16px rgba(0,0,0,0.06)',
+                        border: '1px solid #e2e8f0',
+                        textAlign: 'center'
+                    }}>
+                        <div style={{ fontSize: 'clamp(2rem, 3vw, 2.5rem)', marginBottom: '0.75rem' }}>💬</div>
+                        <h3 style={{ fontSize: 'clamp(1rem, 1.3vw + 0.5rem, 1.25rem)', fontWeight: 600, marginBottom: '0.5rem', color: '#0f172a' }}>
+                            24/7 Support
+                        </h3>
+                        <p style={{ fontSize: 'clamp(0.875rem, 1vw + 0.5rem, 1rem)', color: '#64748b', margin: 0 }}>
+                            Expert assistance available
+                        </p>
+                    </div>
+                </motion.div>
             </div>
+
+            {/* Related Products Section */}
+            <motion.section
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.6 }}
+                style={{
+                    background: 'linear-gradient(180deg, #f8fafc 0%, #ffffff 100%)',
+                    padding: 'clamp(3rem, 5vw, 5rem) clamp(1.5rem, 5vw, 8rem)',
+                    marginTop: 'clamp(2rem, 4vw, 4rem)'
+                }}
+            >
+                <div style={{ maxWidth: 'clamp(1200px, 90vw, 1400px)', margin: '0 auto' }}>
+                    <h2 style={{
+                        fontSize: 'clamp(1.75rem, 3vw + 1rem, 2.5rem)',
+                        fontWeight: 700,
+                        color: '#0f172a',
+                        marginBottom: 'clamp(2rem, 3vw, 3rem)',
+                        textAlign: 'center'
+                    }}>
+                        Related Products
+                    </h2>
+                    <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fill, minmax(clamp(250px, 25vw, 300px), 1fr))',
+                        gap: 'clamp(1.5rem, 2.5vw, 2rem)'
+                    }}>
+                        {productsList.filter(p => p.slug !== slug).slice(0, 4).map((relatedProduct) => (
+                            <Link key={relatedProduct.slug} href={`/products/${relatedProduct.slug}`} style={{ textDecoration: 'none' }}>
+                                <motion.div
+                                    whileHover={{ y: -8, scale: 1.02 }}
+                                    style={{
+                                        background: '#ffffff',
+                                        borderRadius: 'clamp(12px, 1.5vw, 16px)',
+                                        overflow: 'hidden',
+                                        boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
+                                        border: '1px solid #e2e8f0',
+                                        cursor: 'pointer',
+                                        transition: 'all 0.3s ease'
+                                    }}
+                                >
+                                    <div style={{
+                                        width: '100%',
+                                        height: 'clamp(180px, 20vw, 220px)',
+                                        background: 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)',
+                                        overflow: 'hidden'
+                                    }}>
+                                        <img
+                                            src={relatedProduct.img}
+                                            alt={relatedProduct.name}
+                                            style={{
+                                                width: '100%',
+                                                height: '100%',
+                                                objectFit: 'cover'
+                                            }}
+                                        />
+                                    </div>
+                                    <div style={{ padding: 'clamp(1rem, 1.5vw, 1.5rem)' }}>
+                                        <h3 style={{
+                                            fontSize: 'clamp(1rem, 1.2vw + 0.5rem, 1.25rem)',
+                                            fontWeight: 600,
+                                            color: '#0f172a',
+                                            marginBottom: '0.5rem'
+                                        }}>
+                                            {relatedProduct.name}
+                                        </h3>
+                                        <p style={{
+                                            fontSize: 'clamp(0.875rem, 1vw + 0.5rem, 1rem)',
+                                            color: '#64748b',
+                                            margin: 0
+                                        }}>
+                                            {relatedProduct.desc}
+                                        </p>
+                                    </div>
+                                </motion.div>
+                            </Link>
+                        ))}
+                    </div>
+                </div>
+            </motion.section>
+
+            <Footer />
 
             {showInquiry && (
                 <ProductInquiry

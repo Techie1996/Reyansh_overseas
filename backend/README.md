@@ -72,15 +72,14 @@ Backend API for Krishnawanshi Overseas website handling contact forms and produc
 
 ## Email Configuration
 
-The server uses environment variables for email configuration. See `ENV_SETUP.md` for detailed setup instructions.
+The server uses Resend API for reliable email delivery. See `RESEND_SETUP.md` and `ENV_SETUP.md` for detailed setup instructions.
 
 **Required Environment Variables:**
-- `EMAIL_USER`: Your Gmail address
-- `EMAIL_PASSWORD`: Gmail App Password (not your regular password)
+- `RESEND_API_KEY`: Your Resend API key (get from https://resend.com/api-keys)
+- `FROM_EMAIL`: Email address to send from (use `onboarding@resend.dev` for testing)
 - `RECIPIENT_EMAIL`: Email address to receive contact form submissions
 
 **Optional Environment Variables:**
-- `EMAIL_SERVICE`: Email service (defaults to 'gmail')
 - `PORT`: Server port (defaults to 8080)
 - `NODE_ENV`: Environment mode (defaults to 'production')
 
@@ -109,9 +108,9 @@ npm install
 
 2. Create a `.env` file in the `backend` directory:
 ```env
-EMAIL_USER=your-email@gmail.com
-EMAIL_PASSWORD=your-app-password
-RECIPIENT_EMAIL=recipient@gmail.com
+RESEND_API_KEY=re_jPZGoJuF_D4sGBstPYhB9XgDVxPQYEqfA
+FROM_EMAIL=onboarding@resend.dev
+RECIPIENT_EMAIL=reyanshscientificworks@gmail.com
 PORT=8080
 NODE_ENV=development
 ```
@@ -129,5 +128,5 @@ Server runs on port 8080 (or PORT environment variable).
 2. Deploy to Render
 3. Server will automatically use environment variables
 
-**Note:** For Gmail, you must use an App Password, not your regular password. See `ENV_SETUP.md` for instructions.
+**Note:** For production, verify your domain in Resend dashboard for better deliverability. See `RESEND_SETUP.md` for instructions.
 
