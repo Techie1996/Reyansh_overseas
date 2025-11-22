@@ -3,29 +3,43 @@ import { useState, useEffect, useRef } from 'react';
 
 export default function BackgroundMusic() {
     const [isPlaying, setIsPlaying] = useState(false);
-    const [volume, setVolume] = useState(0.12); // Very subtle volume for ASMR-like experience
+    const [isVisible, setIsVisible] = useState(true);
+    const [volume, setVolume] = useState(0.12);
     const audioRef = useRef(null);
+    const hasAutoPlayed = useRef(false);
 
-    // Calming rain and nature ambience - creates a mesmerizing ASMR-like experience
-    // This gentle, continuous rain sound is perfect for relaxation and focus
-    // The sound is very subtle and ambient, creating a peaceful atmosphere
+    // Calming nature ambience - rain and forest sounds
+    const audioUrl = "https://www.soundjay.com/misc/sounds/rain-01.mp3";
 
-    // Using a calming ambient sound - replace with your preferred ASMR source
-    // For best results, use a long-duration track (10+ minutes) that loops seamlessly
-    // 
-    // Recommended free sources for rain/nature sounds:
-    // - Pixabay: https://pixabay.com/music/search/rain%20ambient/
-    // - Freesound: https://freesound.org/ (search: "rain ambient", "nature sounds")
-    // - YouTube Audio Library (download and host your own)
-    // 
-    // To use your own audio file, replace the URL below with your hosted file
-    // Example: "https://your-domain.com/audio/calming-rain-nature.mp3"
-    const audioUrl = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3";
+    // Fallback nature sound URLs if primary fails
+    const fallbackUrls = [
+        "https://cdn.pixabay.com/download/audio/2022/10/25/audio_8a5f07c42c.mp3?filename=rain-ambient-111975.mp3",
+        "https://www.zapsplat.com/wp-content/uploads/2015/sound-effects-one/rain_forest_ambience.mp3"
+    ];
+
+    // Auto-play on mount (after a short delay)
+    useEffect(() => {
+        const autoPlayTimer = setTimeout(() => {
+            if (audioRef.current && !hasAutoPlayed.current) {
+                const playPromise = audioRef.current.play();
+                if (playPromise !== undefined) {
+                    playPromise
+                        .then(() => {
+                            setIsPlaying(true);
+                            hasAutoPlayed.current = true;
+                        })
+                        .catch(err => {
+                            console.log("Auto-play blocked, waiting for user interaction");
+                        });
+                }
+            }
+        }, 1500);
+
+        return () => clearTimeout(autoPlayTimer);
+    }, []);
 
     useEffect(() => {
         if (audioRef.current) {
-            // Keep volume very subtle for ASMR-like experience (max 30% actual volume)
-            // This ensures the calming sounds are background ambience, not distracting
             audioRef.current.volume = Math.min(volume * 0.6, 0.3);
         }
     }, [volume]);
@@ -42,6 +56,10 @@ export default function BackgroundMusic() {
             setIsPlaying(!isPlaying);
         }
     };
+
+    if (!isVisible) {
+        return null;
+    }
 
     return (
         <div
@@ -70,6 +88,14 @@ export default function BackgroundMusic() {
                 src={audioUrl}
                 loop
                 preload="auto"
+                onError={(e) => {
+                    console.log("Audio load error, trying fallback...");
+                    const currentSrc = e.target?.src || audioUrl;
+                    const fallbackIndex = fallbackUrls.findIndex(url => url !== currentSrc);
+                    if (e.target && fallbackIndex >= 0) {
+                        e.target.src = fallbackUrls[fallbackIndex];
+                    }
+                }}
             />
             <button
                 onClick={togglePlay}
@@ -101,8 +127,8 @@ export default function BackgroundMusic() {
                         e.currentTarget.style.transform = 'scale(1)';
                     }
                 }}
-                aria-label={isPlaying ? "Pause calming sounds" : "Play calming sounds"}
-                title={isPlaying ? "Pause nature sounds" : "Play calming rain & nature sounds"}
+                aria-label={isPlaying ? "Pause nature sounds" : "Play nature sounds"}
+                title={isPlaying ? "Pause nature sounds" : "Play nature sounds"}
             >
                 {isPlaying ? '🌧️' : '🌿'}
             </button>
@@ -119,9 +145,44 @@ export default function BackgroundMusic() {
                     maxWidth: '100px',
                     flexShrink: 1
                 }}
-                aria-label="Volume control for calming sounds"
+                aria-label="Volume control for nature sounds"
                 title={`Nature sounds volume: ${Math.round(volume * 60)}%`}
             />
+            <button
+                onClick={() => setIsVisible(false)}
+                style={{
+                    background: 'rgba(0, 0, 0, 0.05)',
+                    border: 'none',
+                    fontSize: 'clamp(14px, 1.8vw, 18px)',
+                    cursor: 'pointer',
+                    padding: 'clamp(4px, 0.8vw, 6px) clamp(6px, 1vw, 8px)',
+                    borderRadius: '6px',
+                    color: '#666',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'all 0.2s ease',
+                    flexShrink: 0,
+                    minWidth: 'clamp(24px, 3vw, 28px)',
+                    minHeight: 'clamp(24px, 3vw, 28px)'
+                }}
+                onMouseEnter={(e) => {
+                    if (e.currentTarget) {
+                        e.currentTarget.style.background = 'rgba(0, 0, 0, 0.1)';
+                        e.currentTarget.style.color = '#333';
+                    }
+                }}
+                onMouseLeave={(e) => {
+                    if (e.currentTarget) {
+                        e.currentTarget.style.background = 'rgba(0, 0, 0, 0.05)';
+                        e.currentTarget.style.color = '#666';
+                    }
+                }}
+                aria-label="Close nature sounds player"
+                title="Close nature sounds"
+            >
+                ×
+            </button>
             <style>{`
                 input[type="range"] {
                     -webkit-appearance: none;
@@ -169,4 +230,3 @@ export default function BackgroundMusic() {
         </div>
     );
 }
-

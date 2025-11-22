@@ -45,17 +45,17 @@ export default function NavMenu() {
             link.download = 'brochure.pdf';
             link.style.display = 'none';
             document.body.appendChild(link);
-            
+
             // Trigger download
             link.click();
-            
+
             // Clean up after a short delay
             setTimeout(() => {
                 if (document.body.contains(link)) {
                     document.body.removeChild(link);
                 }
             }, 100);
-            
+
             setMenuOpen(false);
         } catch (error) {
             console.error('Download error:', error);
@@ -212,8 +212,8 @@ export default function NavMenu() {
                             left: 0,
                             width: '100vw',
                             height: '100vh',
-                            background: '#ffffff',
-                            backgroundColor: '#ffffff',
+                            background: '#ffffff !important',
+                            backgroundColor: '#ffffff !important',
                             zIndex: 9999,
                             display: 'flex',
                             flexDirection: 'column',
@@ -223,7 +223,9 @@ export default function NavMenu() {
                             boxShadow: '-4px 0 20px rgba(0,0,0,0.1)',
                             overflowY: 'auto',
                             WebkitBackfaceVisibility: 'hidden',
-                            backfaceVisibility: 'hidden'
+                            backfaceVisibility: 'hidden',
+                            backdropFilter: 'none !important',
+                            WebkitBackdropFilter: 'none !important'
                         }}>
                         <motion.button
                             onClick={() => setMenuOpen(false)}
@@ -446,6 +448,13 @@ export default function NavMenu() {
           .nav-mobile-menu {
             display: none !important;
           }
+        }
+        .nav-mobile-menu {
+          background: #ffffff !important;
+          background-color: #ffffff !important;
+          opacity: 1 !important;
+          backdrop-filter: none !important;
+          -webkit-backdrop-filter: none !important;
         }
       `}</style>
         </>

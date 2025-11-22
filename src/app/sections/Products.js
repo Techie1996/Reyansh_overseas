@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { allProducts } from '../data/products';
 
 function ProductCard({ product, index }) {
@@ -164,6 +164,30 @@ function ProductCard({ product, index }) {
 export default function Products() {
     const sectionRef = useRef(null);
     const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+    const [visibleCount, setVisibleCount] = useState(5);
+    const [isMobile, setIsMobile] = useState(false);
+
+    // Check if mobile on mount and resize
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
+    // Reset visible count when switching between mobile/desktop
+    useEffect(() => {
+        setVisibleCount(isMobile ? 5 : allProducts.length);
+    }, [isMobile]);
+
+    const handleLoadMore = () => {
+        setVisibleCount(prev => Math.min(prev + 5, allProducts.length));
+    };
+
+    const displayedProducts = isMobile ? allProducts.slice(0, visibleCount) : allProducts;
+    const hasMore = isMobile && visibleCount < allProducts.length;
 
     return (
         <section ref={sectionRef} id="products" style={{
@@ -221,10 +245,54 @@ export default function Products() {
                     maxWidth: 'clamp(1200px, 90vw, 1600px)',
                     margin: '0 auto'
                 }}>
-                    {allProducts.map((p, i) => (
+                    {displayedProducts.map((p, i) => (
                         <ProductCard key={p.slug} product={p} index={i} />
                     ))}
                 </div>
+
+                {/* Load More Button - Only on Mobile */}
+                {hasMore && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3 }}
+                        style={{
+                            textAlign: 'center',
+                            marginTop: 'clamp(2rem, 4vw, 3rem)'
+                        }}
+                    >
+                        <motion.button
+                            onClick={handleLoadMore}
+                            whileHover={{ scale: 1.05, y: -2 }}
+                            whileTap={{ scale: 0.95 }}
+                            style={{
+                                background: 'linear-gradient(135deg, #2563eb 0%, #1e40af 100%)',
+                                color: '#ffffff',
+                                border: 'none',
+                                padding: 'clamp(0.875rem, 1.5vw, 1.125rem) clamp(2rem, 4vw, 3rem)',
+                                borderRadius: 'clamp(8px, 1vw, 12px)',
+                                fontSize: 'clamp(0.9375rem, 1.2vw + 0.5rem, 1.125rem)',
+                                fontWeight: 600,
+                                cursor: 'pointer',
+                                boxShadow: '0 8px 24px rgba(37, 99, 235, 0.3)',
+                                transition: 'all 0.3s ease',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '0.5rem'
+                            }}
+                        >
+                            <span>Load More Products</span>
+                            <span style={{ fontSize: '1.2em' }}>↓</span>
+                        </motion.button>
+                        <p style={{
+                            marginTop: '1rem',
+                            fontSize: 'clamp(0.875rem, 1vw + 0.5rem, 1rem)',
+                            color: '#64748b'
+                        }}>
+                            Showing {visibleCount} of {allProducts.length} products
+                        </p>
+                    </motion.div>
+                )}
             </div>
             <style>{`
         @media (max-width: 640px) {

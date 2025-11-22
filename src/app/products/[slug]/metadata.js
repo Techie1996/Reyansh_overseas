@@ -44,7 +44,7 @@ export function generateMetadata({ params }) {
           alt: `${product.name} - Laboratory Glassware`,
         },
       ],
-      type: 'product',
+      type: 'website',
     },
     twitter: {
       card: 'summary_large_image',
