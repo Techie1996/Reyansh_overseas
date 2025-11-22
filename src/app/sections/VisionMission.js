@@ -3,7 +3,17 @@ import { motion } from 'framer-motion';
 
 export default function VisionMission() {
     return (
-        <section style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 32, padding: '5vw 0', background: '#fff', position: 'relative' }}>
+        <section style={{ 
+            display: 'flex', 
+            flexWrap: 'wrap', 
+            justifyContent: 'center', 
+            gap: 'clamp(2rem, 4vw, 4rem)', 
+            padding: 'clamp(3rem, 6vw, 6rem) clamp(1.5rem, 5vw, 8rem)', 
+            background: '#fff', 
+            position: 'relative',
+            maxWidth: 'clamp(1200px, 90vw, 1600px)',
+            margin: '0 auto'
+        }}>
             <motion.div 
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -12,10 +22,10 @@ export default function VisionMission() {
                 whileHover={{ scale: 1.02, y: -5 }}
                 style={{ 
                     flex: 1, 
-                    minWidth: 280, 
-                    maxWidth: 500, 
+                    minWidth: 'clamp(280px, 40vw, 400px)', 
+                    maxWidth: 'clamp(500px, 50vw, 700px)', 
                     textAlign: 'center',
-                    padding: 32,
+                    padding: 'clamp(2rem, 3vw, 3rem)',
                     background: 'linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%)',
                     borderRadius: 20,
                     boxShadow: '0 8px 30px rgba(0,0,0,0.08)',
@@ -23,13 +33,22 @@ export default function VisionMission() {
                 }}
             >
                 <motion.h3 
-                    style={{ color: '#4285f4', fontWeight: 'bold', fontSize: '1.7rem', marginBottom: 12 }}
+                    style={{ 
+                        color: '#4285f4', 
+                        fontWeight: 'bold', 
+                        fontSize: 'clamp(1.5rem, 2.5vw + 1rem, 2.25rem)', 
+                        marginBottom: 'clamp(0.75rem, 1.5vw, 1.25rem)' 
+                    }}
                     whileHover={{ scale: 1.1 }}
                     transition={{ duration: 0.3 }}
                 >
                     OUR VISION
                 </motion.h3>
-                <p style={{ fontSize: 18, lineHeight: 1.6, color: '#333' }}>
+                <p style={{ 
+                    fontSize: 'clamp(1rem, 1.2vw + 0.5rem, 1.375rem)', 
+                    lineHeight: 1.6, 
+                    color: '#333' 
+                }}>
                     To be a globally recognized leader in the manufacturing and supply of high-quality laboratory glassware, fostering innovation and excellence to support the scientific, pharmaceutical, and industrial sectors in their pursuit of progress.
                 </p>
             </motion.div>
@@ -41,10 +60,10 @@ export default function VisionMission() {
                 whileHover={{ scale: 1.02, y: -5 }}
                 style={{ 
                     flex: 1, 
-                    minWidth: 280, 
-                    maxWidth: 500, 
+                    minWidth: 'clamp(280px, 40vw, 400px)', 
+                    maxWidth: 'clamp(500px, 50vw, 700px)', 
                     textAlign: 'center',
-                    padding: 32,
+                    padding: 'clamp(2rem, 3vw, 3rem)',
                     background: 'linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%)',
                     borderRadius: 20,
                     boxShadow: '0 8px 30px rgba(0,0,0,0.08)',
@@ -52,13 +71,22 @@ export default function VisionMission() {
                 }}
             >
                 <motion.h3 
-                    style={{ color: '#4285f4', fontWeight: 'bold', fontSize: '1.7rem', marginBottom: 12 }}
+                    style={{ 
+                        color: '#4285f4', 
+                        fontWeight: 'bold', 
+                        fontSize: 'clamp(1.5rem, 2.5vw + 1rem, 2.25rem)', 
+                        marginBottom: 'clamp(0.75rem, 1.5vw, 1.25rem)' 
+                    }}
                     whileHover={{ scale: 1.1 }}
                     transition={{ duration: 0.3 }}
                 >
                     OUR MISSION
                 </motion.h3>
-                <p style={{ fontSize: 18, lineHeight: 1.6, color: '#333' }}>
+                <p style={{ 
+                    fontSize: 'clamp(1rem, 1.2vw + 0.5rem, 1.375rem)', 
+                    lineHeight: 1.6, 
+                    color: '#333' 
+                }}>
                     To deliver premium-quality laboratory glassware that meets international standards, ensuring precision and reliability in scientific research and industrial applications. To build lasting partnerships with clients by offering exceptional customer service, competitive pricing, and on-time delivery.
                 </p>
             </motion.div>

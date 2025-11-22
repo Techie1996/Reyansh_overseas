@@ -28,8 +28,8 @@ export default function HeroHeader() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    padding: '1.5rem 5vw',
-                    maxWidth: 1400,
+                    padding: 'clamp(1rem, 2vw, 2rem) clamp(1.5rem, 5vw, 8rem)',
+                    maxWidth: 1600,
                     margin: '0 auto',
                     position: 'relative',
                     zIndex: 2
@@ -38,24 +38,28 @@ export default function HeroHeader() {
                 <motion.div
                     whileHover={{ opacity: 0.8 }}
                     transition={{ duration: 0.2 }}
-                    style={{ display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer' }}
+                    style={{ display: 'flex', alignItems: 'center', gap: 'clamp(8px, 1.5vw, 16px)', cursor: 'pointer' }}
                 >
                     <img
                         src="/4118.jpg"
                         alt="Krishnawanshi Overseas Logo"
                         width={50}
                         height={50}
-                        style={{ borderRadius: 8 }}
+                        style={{
+                            borderRadius: 8,
+                            width: 'clamp(40px, 4vw, 60px)',
+                            height: 'clamp(40px, 4vw, 60px)'
+                        }}
                     />
                     <div style={{
                         fontWeight: 600,
-                        fontSize: 20,
+                        fontSize: 'clamp(16px, 2vw, 24px)',
                         lineHeight: 1.2,
                         color: '#1a1a1a',
                         letterSpacing: '-0.02em'
                     }}>
                         Krishnawanshi<br />
-                        <span style={{ fontSize: 14, color: '#64748b', fontWeight: 400 }}>Overseas</span>
+                        <span style={{ fontSize: 'clamp(12px, 1.5vw, 18px)', color: '#64748b', fontWeight: 400 }}>Overseas</span>
                     </div>
                 </motion.div>
                 <NavMenu />
@@ -67,12 +71,13 @@ export default function HeroHeader() {
                     style={{
                         position: 'relative',
                         width: '100%',
-                        minHeight: '85vh',
+                        minHeight: 'clamp(600px, 85vh, 900px)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%)',
-                        overflow: 'hidden'
+                        overflow: 'hidden',
+                        padding: 'clamp(2rem, 4vw, 4rem) 0'
                     }}
                 >
                     {/* Subtle background elements */}
@@ -119,8 +124,8 @@ export default function HeroHeader() {
                             zIndex: 2,
                             textAlign: 'center',
                             width: '100%',
-                            maxWidth: 1000,
-                            padding: '0 5vw'
+                            maxWidth: 'clamp(1000px, 90vw, 1400px)',
+                            padding: '0 clamp(1.5rem, 5vw, 8rem)'
                         }}
                     >
                         <motion.div
@@ -129,13 +134,13 @@ export default function HeroHeader() {
                             transition={{ duration: 0.5, delay: 0.1 }}
                         >
                             <h1 style={{
-                                fontSize: 'clamp(2.75rem, 6vw, 5rem)',
+                                fontSize: 'clamp(2.5rem, 5vw + 1rem, 6rem)',
                                 fontWeight: 800,
                                 margin: 0,
                                 letterSpacing: '-0.04em',
                                 lineHeight: 1.1,
                                 color: '#0f172a',
-                                marginBottom: '1.5rem'
+                                marginBottom: 'clamp(1rem, 2vw, 2rem)'
                             }}>
                                 Precision Glassware<br />
                                 <span style={{
@@ -153,13 +158,13 @@ export default function HeroHeader() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: 0.3 }}
                             style={{
-                                fontSize: 'clamp(1.125rem, 1.8vw, 1.375rem)',
+                                fontSize: 'clamp(1rem, 1.5vw + 0.5rem, 1.75rem)',
                                 marginTop: '1rem',
                                 color: '#475569',
                                 fontWeight: 400,
                                 lineHeight: 1.8,
-                                maxWidth: 700,
-                                margin: '2rem auto 0'
+                                maxWidth: 'clamp(600px, 70vw, 900px)',
+                                margin: 'clamp(1.5rem, 3vw, 3rem) auto 0'
                             }}
                         >
                             Leading manufacturer of high-quality laboratory glassware for scientific research, pharmaceutical, and industrial applications worldwide.
@@ -170,9 +175,9 @@ export default function HeroHeader() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: 0.4 }}
                             style={{
-                                marginTop: '3.5rem',
+                                marginTop: 'clamp(2rem, 4vw, 4rem)',
                                 display: 'flex',
-                                gap: '1.25rem',
+                                gap: 'clamp(1rem, 2vw, 1.5rem)',
                                 justifyContent: 'center',
                                 flexWrap: 'wrap'
                             }}
@@ -191,11 +196,11 @@ export default function HeroHeader() {
                                 style={{
                                     background: 'linear-gradient(135deg, #1a1a1a 0%, #0f172a 100%)',
                                     color: '#ffffff',
-                                    padding: '1rem 2.5rem',
+                                    padding: 'clamp(0.875rem, 1.5vw, 1.25rem) clamp(2rem, 4vw, 3.5rem)',
                                     borderRadius: '12px',
                                     fontWeight: 600,
                                     textDecoration: 'none',
-                                    fontSize: '1.125rem',
+                                    fontSize: 'clamp(1rem, 1.2vw + 0.5rem, 1.375rem)',
                                     display: 'inline-block',
                                     transition: 'all 0.3s ease',
                                     boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
@@ -218,11 +223,11 @@ export default function HeroHeader() {
                                 style={{
                                     background: '#ffffff',
                                     color: '#1a1a1a',
-                                    padding: '1rem 2.5rem',
+                                    padding: 'clamp(0.875rem, 1.5vw, 1.25rem) clamp(2rem, 4vw, 3.5rem)',
                                     borderRadius: '12px',
                                     fontWeight: 600,
                                     textDecoration: 'none',
-                                    fontSize: '1.125rem',
+                                    fontSize: 'clamp(1rem, 1.2vw + 0.5rem, 1.375rem)',
                                     display: 'inline-block',
                                     border: '2px solid #e2e8f0',
                                     transition: 'all 0.3s ease',
@@ -240,32 +245,32 @@ export default function HeroHeader() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5, delay: 0.5 }}
                             style={{
-                                marginTop: '4rem',
+                                marginTop: 'clamp(2.5rem, 4vw, 5rem)',
                                 display: 'flex',
-                                gap: '3rem',
+                                gap: 'clamp(2rem, 4vw, 4rem)',
                                 justifyContent: 'center',
                                 flexWrap: 'wrap',
-                                padding: '2.5rem',
+                                padding: 'clamp(2rem, 3vw, 3.5rem)',
                                 background: 'rgba(255,255,255,0.8)',
                                 backdropFilter: 'blur(10px)',
                                 borderRadius: '20px',
                                 border: '1px solid rgba(37, 99, 235, 0.1)',
-                                maxWidth: 800,
-                                margin: '4rem auto 0',
+                                maxWidth: 'clamp(700px, 80vw, 1000px)',
+                                margin: 'clamp(2.5rem, 4vw, 5rem) auto 0',
                                 boxShadow: '0 8px 32px rgba(0,0,0,0.08)'
                             }}
                         >
                             <div style={{ textAlign: 'center' }}>
-                                <div style={{ fontSize: '2.5rem', fontWeight: 700, color: '#2563eb', marginBottom: '0.5rem' }}>12+</div>
-                                <div style={{ fontSize: '0.875rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 500 }}>Years Experience</div>
+                                <div style={{ fontSize: 'clamp(2rem, 3vw + 0.5rem, 3.5rem)', fontWeight: 700, color: '#2563eb', marginBottom: '0.5rem' }}>12+</div>
+                                <div style={{ fontSize: 'clamp(0.75rem, 0.8vw + 0.5rem, 1rem)', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 500 }}>Years Experience</div>
                             </div>
                             <div style={{ textAlign: 'center' }}>
-                                <div style={{ fontSize: '2.5rem', fontWeight: 700, color: '#2563eb', marginBottom: '0.5rem' }}>500+</div>
-                                <div style={{ fontSize: '0.875rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 500 }}>Global Clients</div>
+                                <div style={{ fontSize: 'clamp(2rem, 3vw + 0.5rem, 3.5rem)', fontWeight: 700, color: '#2563eb', marginBottom: '0.5rem' }}>500+</div>
+                                <div style={{ fontSize: 'clamp(0.75rem, 0.8vw + 0.5rem, 1rem)', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 500 }}>Global Clients</div>
                             </div>
                             <div style={{ textAlign: 'center' }}>
-                                <div style={{ fontSize: '2.5rem', fontWeight: 700, color: '#2563eb', marginBottom: '0.5rem' }}>ISO</div>
-                                <div style={{ fontSize: '0.875rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 500 }}>Certified</div>
+                                <div style={{ fontSize: 'clamp(2rem, 3vw + 0.5rem, 3.5rem)', fontWeight: 700, color: '#2563eb', marginBottom: '0.5rem' }}>ISO</div>
+                                <div style={{ fontSize: 'clamp(0.75rem, 0.8vw + 0.5rem, 1rem)', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 500 }}>Certified</div>
                             </div>
                         </motion.div>
                     </motion.div>

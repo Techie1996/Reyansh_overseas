@@ -46,7 +46,7 @@ function ProductCard({ product, index }) {
             >
                 <div style={{
                     width: '100%',
-                    height: '240px',
+                    height: 'clamp(200px, 20vw, 280px)',
                     background: 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)',
                     position: 'relative',
                     overflow: 'hidden'
@@ -98,11 +98,11 @@ function ProductCard({ product, index }) {
                     </div>
                 </div>
 
-                <div style={{ padding: '1.75rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                <div style={{ padding: 'clamp(1.25rem, 2vw, 2rem)', flex: 1, display: 'flex', flexDirection: 'column' }}>
                     <h3 style={{
                         fontWeight: 700,
-                        fontSize: '1.375rem',
-                        marginBottom: '0.75rem',
+                        fontSize: 'clamp(1.125rem, 1.3vw + 0.5rem, 1.625rem)',
+                        marginBottom: 'clamp(0.5rem, 1vw, 1rem)',
                         color: '#0f172a',
                         letterSpacing: '-0.02em',
                         lineHeight: 1.2
@@ -110,12 +110,12 @@ function ProductCard({ product, index }) {
                         {product.name}
                     </h3>
                     <p style={{
-                        fontSize: '0.9375rem',
+                        fontSize: 'clamp(0.875rem, 1vw + 0.5rem, 1.125rem)',
                         color: '#64748b',
                         lineHeight: 1.7,
                         margin: 0,
                         flex: 1,
-                        marginBottom: '1.5rem'
+                        marginBottom: 'clamp(1rem, 1.5vw, 1.5rem)'
                     }}>
                         {product.desc}
                     </p>
@@ -135,12 +135,12 @@ function ProductCard({ product, index }) {
                         whileTap={{ scale: 0.95 }}
                         style={{
                             width: '100%',
-                            padding: '0.875rem 1.5rem',
+                            padding: 'clamp(0.75rem, 1.2vw, 1rem) clamp(1.25rem, 2vw, 1.75rem)',
                             background: 'linear-gradient(135deg, #1a1a1a 0%, #2d3748 100%)',
                             color: '#ffffff',
                             border: 'none',
                             borderRadius: '10px',
-                            fontSize: '0.9375rem',
+                            fontSize: 'clamp(0.875rem, 1vw + 0.5rem, 1.125rem)',
                             fontWeight: 600,
                             cursor: 'pointer',
                             transition: 'all 0.3s ease',
@@ -152,7 +152,7 @@ function ProductCard({ product, index }) {
                         }}
                     >
                         <span>Add to Inquiry</span>
-                        <span style={{ fontSize: '1.2rem' }}>→</span>
+                        <span style={{ fontSize: 'clamp(1rem, 1.2vw, 1.3rem)' }}>→</span>
                     </motion.button>
                 </div>
             </motion.div>
@@ -168,7 +168,7 @@ export default function Products() {
         <section ref={sectionRef} id="products" style={{
             background: 'linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)',
             color: '#1a1a1a',
-            padding: '6rem 0',
+            padding: 'clamp(4rem, 8vw, 8rem) 0',
             position: 'relative'
         }}>
             {/* Background decoration */}
@@ -177,34 +177,34 @@ export default function Products() {
                 top: 0,
                 left: 0,
                 right: 0,
-                height: '400px',
+                height: 'clamp(300px, 40vw, 500px)',
                 background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.03) 0%, rgba(30, 64, 175, 0.01) 100%)',
                 pointerEvents: 'none'
             }} />
 
-            <div style={{ maxWidth: 1400, margin: '0 auto', padding: '0 5vw', position: 'relative', zIndex: 1 }}>
+            <div style={{ maxWidth: 'clamp(1200px, 90vw, 1600px)', margin: '0 auto', padding: '0 clamp(1.5rem, 5vw, 8rem)', position: 'relative', zIndex: 1 }}>
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                     transition={{ duration: 0.3 }}
-                    style={{ textAlign: 'center', marginBottom: '1rem' }}
+                    style={{ textAlign: 'center', marginBottom: 'clamp(2rem, 4vw, 3rem)' }}
                 >
                     <h2 style={{
-                        fontSize: 'clamp(2rem, 4vw, 3.5rem)',
+                        fontSize: 'clamp(2rem, 4vw + 1rem, 4.5rem)',
                         fontWeight: 700,
                         margin: 0,
                         color: '#0f172a',
                         letterSpacing: '-0.02em',
                         lineHeight: 1.2,
-                        marginBottom: '1rem'
+                        marginBottom: 'clamp(1rem, 2vw, 1.5rem)'
                     }}>
                         Premium Laboratory Glassware
                     </h2>
                     <p style={{
-                        fontSize: 'clamp(0.9375rem, 1.2vw, 1.125rem)',
+                        fontSize: 'clamp(0.9375rem, 1.2vw + 0.5rem, 1.375rem)',
                         color: '#64748b',
                         marginTop: '1rem',
-                        maxWidth: 700,
+                        maxWidth: 'clamp(600px, 70vw, 900px)',
                         marginLeft: 'auto',
                         marginRight: 'auto',
                         lineHeight: 1.6
@@ -215,9 +215,9 @@ export default function Products() {
 
                 <div className="products-original-grid" style={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-                    gap: '2.5rem',
-                    maxWidth: 1400,
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(clamp(280px, 25vw, 350px), 1fr))',
+                    gap: 'clamp(1.5rem, 3vw, 3rem)',
+                    maxWidth: 'clamp(1200px, 90vw, 1600px)',
                     margin: '0 auto'
                 }}>
                     {allProducts.map((p, i) => (
@@ -226,21 +226,40 @@ export default function Products() {
                 </div>
             </div>
             <style>{`
-        @media (max-width: 768px) {
+        @media (max-width: 640px) {
           .products-original-grid {
-            grid-template-columns: 1fr;
-            gap: 2rem;
+            grid-template-columns: 1fr !important;
+            gap: 1.5rem !important;
+          }
+        }
+        @media (min-width: 641px) and (max-width: 768px) {
+          .products-original-grid {
+            grid-template-columns: repeat(1, 1fr) !important;
+            gap: 2rem !important;
           }
         }
         @media (min-width: 769px) and (max-width: 1024px) {
           .products-original-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 2rem !important;
           }
         }
-        @media (min-width: 1400px) {
+        @media (min-width: 1025px) and (max-width: 1400px) {
           .products-original-grid {
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 2.5rem !important;
+          }
+        }
+        @media (min-width: 1401px) {
+          .products-original-grid {
+            grid-template-columns: repeat(4, 1fr) !important;
+            gap: 3rem !important;
+          }
+        }
+        @media (min-width: 1920px) {
+          .products-original-grid {
+            grid-template-columns: repeat(4, 1fr) !important;
+            gap: 3.5rem !important;
           }
         }
       `}</style>

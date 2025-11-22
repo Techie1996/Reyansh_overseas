@@ -43,7 +43,8 @@ export default function ContactForm() {
         }
 
         try {
-            const res = await fetch('https://reyansh-overseas.onrender.com/api/contact', {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://reyansh-overseas.onrender.com';
+            const res = await fetch(`${apiUrl}/api/contact`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

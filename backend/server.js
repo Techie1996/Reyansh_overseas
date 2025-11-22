@@ -1,3 +1,6 @@
+// Load environment variables
+require('dotenv').config();
+
 const express = require('express');
 const nodemailer = require('nodemailer');
 const cors = require('cors');
@@ -16,17 +19,29 @@ app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
 
 // Email transporter configuration - optimized for Render.com
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
+// Use environment variables for security
+const emailConfig = {
+    service: process.env.EMAIL_SERVICE || 'gmail',
     auth: {
-        user: 'govindayadav2478@gmail.com',
-        pass: 'vboj hawo vwbh skum', // Gmail app password
+        user: process.env.EMAIL_USER || 'govindayadav2478@gmail.com',
+        pass: process.env.EMAIL_PASSWORD || 'vboj hawo vwbh skum', // Gmail app password
     },
     // Let nodemailer auto-detect the best connection settings
     connectionTimeout: 60000, // 60 seconds
     greetingTimeout: 30000,
     socketTimeout: 60000,
-});
+    // Additional options for better reliability on Render
+    pool: true,
+    maxConnections: 1,
+    maxMessages: 3,
+    rateDelta: 1000,
+    rateLimit: 5
+};
+
+const transporter = nodemailer.createTransport(emailConfig);
+
+// Recipient email from environment variable
+const RECIPIENT_EMAIL = process.env.RECIPIENT_EMAIL || 'reyanshscientificworks@gmail.com';
 
 // Validation helper
 function validateEmail(email) {
@@ -125,19 +140,44 @@ ${type === 'product_inquiry' ? '\nType: Product Inquiry' : ''}
         // Verify connection first (optional, but helps debug)
         try {
             await transporter.verify();
-            console.log('SMTP connection verified for contact form');
+            console.log('✅ SMTP connection verified for contact form');
         } catch (verifyError) {
-            console.error('SMTP verification failed:', verifyError);
+            console.error('❌ SMTP verification failed:', verifyError.message);
+            // Don't fail the request if verification fails, but log it
         }
 
-        const mailResult = await transporter.sendMail({
-            from: 'Krishnawanshi Overseas Website <govindayadav2478@gmail.com>',
-            to: 'reyanshscientificworks@gmail.com',
-            replyTo: email,
-            subject: subject,
-            text: emailText,
-            html: emailHtml,
-        });
+        // Retry logic for email sending
+        let mailResult;
+        let lastError;
+        const maxRetries = 3;
+        
+        for (let attempt = 1; attempt <= maxRetries; attempt++) {
+            try {
+                mailResult = await transporter.sendMail({
+                    from: `Krishnawanshi Overseas Website <${emailConfig.auth.user}>`,
+                    to: RECIPIENT_EMAIL,
+                    replyTo: email,
+                    subject: subject,
+                    text: emailText,
+                    html: emailHtml,
+                });
+                console.log(`✅ Contact form email sent successfully on attempt ${attempt}!`);
+                break; // Success, exit retry loop
+            } catch (sendError) {
+                lastError = sendError;
+                console.error(`❌ Email send attempt ${attempt} failed:`, sendError.message);
+                
+                if (attempt < maxRetries) {
+                    const waitTime = attempt * 2000; // Exponential backoff: 2s, 4s, 6s
+                    console.log(`⏳ Retrying in ${waitTime}ms...`);
+                    await new Promise(resolve => setTimeout(resolve, waitTime));
+                }
+            }
+        }
+        
+        if (!mailResult) {
+            throw lastError || new Error('Failed to send email after all retries');
+        }
 
         console.log('Contact form email sent successfully!');
         console.log('Message ID:', mailResult.messageId);
@@ -316,22 +356,53 @@ Please respond to: ${email}
 </html>
         `;
 
-        console.log('Attempting to send email...');
-        console.log('From:', 'govindayadav2478@gmail.com');
-        console.log('To:', 'reyanshscientificworks@gmail.com');
+        console.log('📧 Attempting to send product inquiry email...');
+        console.log('From:', emailConfig.auth.user);
+        console.log('To:', RECIPIENT_EMAIL);
         console.log('Subject:', emailSubject);
 
-        // Send email
-        const mailResult = await transporter.sendMail({
-            from: 'Krishnawanshi Overseas Website <govindayadav2478@gmail.com>',
-            to: 'reyanshscientificworks@gmail.com',
-            replyTo: email,
-            subject: emailSubject,
-            text: emailText,
-            html: emailHtml,
-        });
+        // Verify connection first
+        try {
+            await transporter.verify();
+            console.log('✅ SMTP connection verified for product inquiry');
+        } catch (verifyError) {
+            console.error('❌ SMTP verification failed:', verifyError.message);
+        }
 
-        console.log('✅ Email sent successfully!');
+        // Retry logic for email sending
+        let mailResult;
+        let lastError;
+        const maxRetries = 3;
+        
+        for (let attempt = 1; attempt <= maxRetries; attempt++) {
+            try {
+                mailResult = await transporter.sendMail({
+                    from: `Krishnawanshi Overseas Website <${emailConfig.auth.user}>`,
+                    to: RECIPIENT_EMAIL,
+                    replyTo: email,
+                    subject: emailSubject,
+                    text: emailText,
+                    html: emailHtml,
+                });
+                console.log(`✅ Product inquiry email sent successfully on attempt ${attempt}!`);
+                break; // Success, exit retry loop
+            } catch (sendError) {
+                lastError = sendError;
+                console.error(`❌ Email send attempt ${attempt} failed:`, sendError.message);
+                
+                if (attempt < maxRetries) {
+                    const waitTime = attempt * 2000; // Exponential backoff: 2s, 4s, 6s
+                    console.log(`⏳ Retrying in ${waitTime}ms...`);
+                    await new Promise(resolve => setTimeout(resolve, waitTime));
+                }
+            }
+        }
+        
+        if (!mailResult) {
+            throw lastError || new Error('Failed to send email after all retries');
+        }
+
+        console.log('✅ Product inquiry email sent successfully!');
         console.log('Message ID:', mailResult.messageId);
         console.log('Response:', mailResult.response);
 

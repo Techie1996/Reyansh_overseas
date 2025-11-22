@@ -4,7 +4,13 @@ import { motion } from 'framer-motion';
 
 export default function Contact() {
     return (
-        <section id="contact" style={{ background: '#fafbff', padding: '5vw 0', position: 'relative', overflow: 'hidden', minHeight: 500 }}>
+        <section id="contact" style={{ 
+            background: '#fafbff', 
+            padding: 'clamp(3rem, 6vw, 6rem) 0', 
+            position: 'relative', 
+            overflow: 'hidden', 
+            minHeight: 'clamp(500px, 60vh, 700px)' 
+        }}>
             {/* Desktop background image with overlay */}
             <div style={{
                 position: 'absolute',
@@ -63,14 +69,14 @@ export default function Contact() {
                 style={{
                     display: 'flex',
                     flexWrap: 'wrap',
-                    gap: 48,
+                    gap: 'clamp(2rem, 4vw, 4rem)',
                     justifyContent: 'center',
                     alignItems: 'flex-start',
                     position: 'relative',
                     zIndex: 1,
-                    maxWidth: 1400,
+                    maxWidth: 'clamp(1200px, 90vw, 1600px)',
                     margin: '0 auto',
-                    padding: '0 5vw'
+                    padding: '0 clamp(1.5rem, 5vw, 8rem)'
                 }}
             >
                 {/* Info card with glassmorphism */}
@@ -82,9 +88,9 @@ export default function Contact() {
                     whileHover={{ scale: 1.02, y: -5 }}
                     style={{
                         flex: 1,
-                        minWidth: 280,
-                        maxWidth: 400,
-                        padding: 24,
+                        minWidth: 'clamp(280px, 40vw, 400px)',
+                        maxWidth: 'clamp(400px, 45vw, 550px)',
+                        padding: 'clamp(1.5rem, 2.5vw, 2.5rem)',
                         background: 'rgba(255,255,255,0.7)',
                         boxShadow: '0 8px 32px 0 rgba(31,38,135,0.10)',
                         borderRadius: 18,
@@ -93,29 +99,69 @@ export default function Contact() {
                         border: '1px solid rgba(255,255,255,0.18)',
                         marginBottom: 24,
                     }}>
-                    <h2 style={{ fontFamily: 'Montserrat, Arial, sans-serif', fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 800, marginBottom: 8, color: '#111', letterSpacing: 1, textAlign: 'center' }}>✱ Let's Talk</h2>
-                    <div style={{ marginBottom: 16, color: '#222', fontSize: 17, textAlign: 'center' }}>
+                    <h2 style={{ 
+                        fontFamily: 'Montserrat, Arial, sans-serif', 
+                        fontSize: 'clamp(1.75rem, 3vw + 1rem, 3rem)', 
+                        fontWeight: 800, 
+                        marginBottom: 'clamp(0.5rem, 1vw, 1rem)', 
+                        color: '#111', 
+                        letterSpacing: 1, 
+                        textAlign: 'center' 
+                    }}>✱ Let's Talk</h2>
+                    <div style={{ 
+                        marginBottom: 'clamp(1rem, 1.5vw, 1.5rem)', 
+                        color: '#222', 
+                        fontSize: 'clamp(1rem, 1.2vw + 0.5rem, 1.25rem)', 
+                        textAlign: 'center' 
+                    }}>
                         Contact us today to discuss your business needs.
                     </div>
-                    <div style={{ marginBottom: 16, fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, flexWrap: 'wrap' }}>
-                        <span style={{ fontSize: 28 }}>🏢</span>
+                    <div style={{ 
+                        marginBottom: 'clamp(1rem, 1.5vw, 1.5rem)', 
+                        fontSize: 'clamp(0.9375rem, 1.1vw + 0.5rem, 1.125rem)', 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'center', 
+                        gap: 10, 
+                        flexWrap: 'wrap' 
+                    }}>
+                        <span style={{ fontSize: 'clamp(24px, 2.5vw, 32px)' }}>🏢</span>
                         <span style={{ textAlign: 'center' }}>Ambala Cantt, Haryana, 133001</span>
                     </div>
-                    <div style={{ marginBottom: 16, fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, flexWrap: 'wrap' }}>
-                        <span style={{ fontSize: 28 }}>📧</span>
+                    <div style={{ 
+                        marginBottom: 'clamp(1rem, 1.5vw, 1.5rem)', 
+                        fontSize: 'clamp(0.9375rem, 1.1vw + 0.5rem, 1.125rem)', 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'center', 
+                        gap: 10, 
+                        flexWrap: 'wrap' 
+                    }}>
+                        <span style={{ fontSize: 'clamp(24px, 2.5vw, 32px)' }}>📧</span>
                         <span style={{ textAlign: 'center' }}>
                             krishnawanshioverseas@gmail.com<br />krishnawanshioverseas2@gmail.com
                         </span>
                     </div>
-                    <div style={{ marginBottom: 16, fontSize: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, flexWrap: 'wrap' }}>
-                        <span style={{ fontSize: 28 }}>📞</span>
+                    <div style={{ 
+                        marginBottom: 'clamp(1rem, 1.5vw, 1.5rem)', 
+                        fontSize: 'clamp(0.9375rem, 1.1vw + 0.5rem, 1.125rem)', 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'center', 
+                        gap: 10, 
+                        flexWrap: 'wrap' 
+                    }}>
+                        <span style={{ fontSize: 'clamp(24px, 2.5vw, 32px)' }}>📞</span>
                         <span style={{ textAlign: 'center' }}>+91- 989699933</span>
                     </div>
-                    <div style={{ marginBottom: 16, textAlign: 'center' }}>
-                        <b>Follow us on Social</b><br />
-                        <span style={{ fontSize: 26, marginRight: 8 }}>📸</span>
-                        <span style={{ fontSize: 26, marginRight: 8 }}>📘</span>
-                        <span style={{ fontSize: 26 }}>🔗</span>
+                    <div style={{ 
+                        marginBottom: 'clamp(1rem, 1.5vw, 1.5rem)', 
+                        textAlign: 'center' 
+                    }}>
+                        <b style={{ fontSize: 'clamp(0.9375rem, 1.1vw + 0.5rem, 1.125rem)' }}>Follow us on Social</b><br />
+                        <span style={{ fontSize: 'clamp(22px, 2.5vw, 30px)', marginRight: 8 }}>📸</span>
+                        <span style={{ fontSize: 'clamp(22px, 2.5vw, 30px)', marginRight: 8 }}>📘</span>
+                        <span style={{ fontSize: 'clamp(22px, 2.5vw, 30px)' }}>🔗</span>
                     </div>
                 </motion.div>
                 {/* Contact form card */}
@@ -125,13 +171,20 @@ export default function Contact() {
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: 0.3 }}
                     whileHover={{ scale: 1.02 }}
-                    style={{ flex: 1, minWidth: 280, maxWidth: 500, padding: 24, width: '100%', boxSizing: 'border-box' }}
+                    style={{ 
+                        flex: 1, 
+                        minWidth: 'clamp(280px, 40vw, 500px)', 
+                        maxWidth: 'clamp(500px, 50vw, 700px)', 
+                        padding: 'clamp(1.5rem, 2.5vw, 2.5rem)', 
+                        width: '100%', 
+                        boxSizing: 'border-box' 
+                    }}
                 >
                     <div style={{
                         background: 'rgba(255,255,255,0.85)',
                         boxShadow: '0 8px 32px 0 rgba(31,38,135,0.18)',
                         borderRadius: 18,
-                        padding: '24px',
+                        padding: 'clamp(1.5rem, 2.5vw, 2.5rem)',
                         backdropFilter: 'blur(6px)',
                         WebkitBackdropFilter: 'blur(6px)',
                         border: '1px solid rgba(255,255,255,0.18)',
