@@ -42,25 +42,25 @@ export default function Contact() {
                 }} />
             </div>
             {/* Mobile background image */}
-            <div style={{
-                width: '100%',
-                textAlign: 'center',
-                marginBottom: 32,
-                display: 'block',
-            }} className="contact-bg-mobile">
-                <img
-                    src="https://images.unsplash.com/photo-1517971071642-34a2d3eccb5e?auto=format&fit=crop&w=700&q=80"
-                    alt="Scientific Glassware"
-                    style={{
-                        width: 180,
-                        height: 60,
-                        objectFit: 'cover',
-                        opacity: 0.28,
-                        borderRadius: 8,
-                        margin: '0 auto',
-                    }}
-                />
-            </div>
+            // <div style={{
+            //     width: '100%',
+            //     textAlign: 'center',
+            //     marginBottom: 32,
+            //     display: 'block',
+            // }} className="contact-bg-mobile">
+            //     <img
+            //         src="https://images.unsplash.com/photo-1517971071642-34a2d3eccb5e?auto=format&fit=crop&w=700&q=80"
+            //         alt="Scientific Glassware"
+            //         style={{
+            //             width: 180,
+            //             height: 60,
+            //             objectFit: 'cover',
+            //             opacity: 0.28,
+            //             borderRadius: 8,
+            //             margin: '0 auto',
+            //         }}
+            //     />
+            // </div>
             <motion.div
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
